@@ -1,0 +1,15 @@
+{
+  "horizFOV": 90,
+  "vertFOV": 60,
+  "maxDistance": 10,
+  "minX": 0,
+  "maxX": 0,
+  "minY": 0,
+  "maxY": 0,
+  "minZ": 0.5,
+  "maxZ": 0.8,
+  "minPitch": -90,
+  "maxPitch": 90,
+  "minYaw": -180,
+  "maxYaw": 180
+}

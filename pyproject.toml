@@ -1,0 +1,13 @@
+[project]
+name = "cameraoptimizer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.8",
+    "robotpy-apriltag>=2025.3.2.3",
+    "robotpy-pathplannerlib>=2025.2.7",
+    "robotpy-wpimath>=2025.3.2.3",
+    "scipy>=1.16.3",
+]
