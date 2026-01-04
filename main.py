@@ -1,9 +1,10 @@
 import argparse
+from functools import partial
 import json
 from dataclasses import dataclass
 from math import exp, hypot, pi, sin
 import matplotlib.pyplot as plt
-from typing import List
+from typing import List, Optional
 from pathplannerlib.auto import PathPlannerAuto, RobotConfig
 from pathplannerlib.path import PathPlannerTrajectoryState
 from robotpy_apriltag import AprilTagFieldLayout
@@ -20,6 +21,7 @@ from wpimath.geometry import (
 )
 
 from scipy.optimize import shgo
+import multiprocessing as mp
 import numpy as np
 from wpiutil import wpistruct
 
@@ -102,33 +104,6 @@ def generate_score_for_camera_tag(
     return tag_score
 
 
-def generate_score_for_camera(
-    robot_pose: Pose2d,
-    camera_transform: Transform3d,
-    horizFOV: float,
-    vertFOV: float,
-    maxDistance: float,
-    apriltag_poses: list[Pose3d],
-) -> float:
-    # Get all AprilTag poses from the field layout
-    # the score for a camera is determined by a combination factors, including how many tags it can see, how close they are, and how on-axis the camera is to seeing the tag
-
-    # filter down to only visible tags
-    camera_pose = pose2dTo3d(robot_pose) + (camera_transform)
-
-    total_score = 0.0
-
-    for tag in apriltag_poses:
-        # Relation of the camera to the tag
-        tag_score = generate_score_for_camera_tag(
-            camera_pose, horizFOV, vertFOV, maxDistance, tag
-        )
-        # Accumulate total score
-        total_score += tag_score
-
-    return total_score
-
-
 @dataclass
 class CameraConstraints:
     horizFOV: float
@@ -167,6 +142,54 @@ class CameraConstraints:
             )
 
 
+# Globals used by multiprocessing worker to access complex objects without pickling them on fork-based platforms
+_MP_CONSTRAINTS: Optional[CameraConstraints] = None
+_MP_TAGS: Optional[list[Pose3d]] = None
+_MP_SAMPLES: Optional[list[Pose3d]] = None
+
+
+def _mp_worker_score(idx: int) -> float:
+    """Worker function that scores a single sample by index using module globals.
+
+    The worker is top-level so it can be used by multiprocessing pools. On Unix platforms
+    the fork start method allows child processes to inherit the complex objects placed
+    in these globals without needing to pickle them per-task.
+    """
+    sample = _MP_SAMPLES[idx]
+    score = generate_score_for_camera(
+        sample,
+        _MP_CONSTRAINTS.horizFOV * pi / 180,
+        _MP_CONSTRAINTS.vertFOV * pi / 180,
+        _MP_CONSTRAINTS.maxDistance,
+        _MP_TAGS,
+    )
+    return score
+
+
+def generate_score_for_camera(
+    camera_pose: Pose3d,
+    horizFOV: float,
+    vertFOV: float,
+    maxDistance: float,
+    apriltag_poses: list[Pose3d],
+) -> float:
+    # Get all AprilTag poses from the field layout
+    # the score for a camera is determined by a combination factors, including how many tags it can see, how close they are, and how on-axis the camera is to seeing the tag
+
+    # filter down to only visible tags
+    total_score = 0.0
+
+    for tag in apriltag_poses:
+        # Relation of the camera to the tag
+        tag_score = generate_score_for_camera_tag(
+            camera_pose, horizFOV, vertFOV, maxDistance, tag
+        )
+        # Accumulate total score
+        total_score += tag_score
+
+    return total_score
+
+
 def scorePath(
     camera_transform: Transform3d,
     constraints: CameraConstraints,
@@ -176,9 +199,9 @@ def scorePath(
     print("Testing transform", camera_transform)
     total_score = 0.0
     for sample in samples:
+        camera_pose = pose2dTo3d(sample.pose) + camera_transform
         score = generate_score_for_camera(
-            sample.pose,
-            camera_transform,
+            camera_pose,
             constraints.horizFOV * pi / 180,
             constraints.vertFOV * pi / 180,
             constraints.maxDistance,
@@ -187,6 +210,35 @@ def scorePath(
         total_score += score
     print("score:", total_score)
     return total_score
+
+
+def objective_mp(
+    x,
+    constraints: CameraConstraints,
+    tags: list[Pose3d],
+    samples: list[PathPlannerTrajectoryState],
+):
+    camera_transform = Transform3d(
+        x[0],
+        x[1],
+        x[2],
+        Rotation3d(
+            0,
+            np.radians(x[3]),
+            np.radians(x[4]),
+        ),
+    )
+    camera_poses = [pose2dTo3d(sample.pose) + camera_transform for sample in samples]
+    global _MP_SAMPLES, _MP_TAGS, _MP_CONSTRAINTS
+    _MP_TAGS = tags
+    _MP_CONSTRAINTS = constraints
+    _MP_SAMPLES = camera_poses
+
+    max_workers = min(32, mp.cpu_count() or 1)
+    # Map over sample indices so only simple integers are sent to worker processes
+    with mp.Pool(processes=max_workers) as pool:
+        results = pool.map(_mp_worker_score, range(len(camera_poses)))
+    return np.sum(results)
 
 
 def objective(
@@ -278,6 +330,12 @@ def main():
         default=False,
         help="Display a map of all rotation values, will pick the midpoint of provided translation boundary",
     )
+    parser.add_argument(
+        "--mp",
+        action="store_true",
+        default=True,
+        help="Enable multithreaded computation",
+    )
     args = parser.parse_args()
 
     field = AprilTagFieldLayout(args.tags)
@@ -347,7 +405,7 @@ def main():
         #     method="L-BFGS-B",
         # )
         result = shgo(
-            objective,
+            objective_mp if args.mp else objective,
             bounds,
             args=(constraints, tagPoses, samples),
             options={"disp": True, "maxiter": 100},
