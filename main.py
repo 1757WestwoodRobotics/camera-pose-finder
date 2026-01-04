@@ -1,13 +1,12 @@
 import argparse
 import json
-import matplotlib.pyplot as plt
 from dataclasses import dataclass
-from math import atan2, exp, hypot, pi, sin
+from math import exp, hypot, pi, radians, sin
 from typing import List
 from pathplannerlib.auto import PathPlannerAuto, RobotConfig
 from pathplannerlib.path import PathPlannerTrajectoryState
-from robotpy_apriltag import AprilTagFieldLayout, AprilTagField
-from scipy.sparse import data
+from robotpy_apriltag import AprilTagFieldLayout
+from wpilib import DataLogManager
 from wpimath.geometry import (
     Pose2d,
     Pose3d,
@@ -19,10 +18,9 @@ from wpimath.geometry import (
     Translation3d,
 )
 
-from scipy.optimize import minimize, differential_evolution
+from scipy.optimize import shgo
 import numpy as np
-import multiprocessing as mp
-from wpiutil import DataLogWriter, wpistruct
+from wpiutil import wpistruct
 
 SAMPLE_INTERVAL = 0.02  # seconds
 
@@ -72,6 +70,13 @@ def generate_score_for_camera(
     for tag in apriltag_poses:
         # Relation of the camera to the tag
         rel = CameraTargetRelation(camera_pose, tag)
+        if not (
+            abs(rel.camToTargYaw.radians()) < horizFOV / 2
+            and abs(rel.camToTargPitch.radians()) < vertFOV / 2
+            and abs(rel.targToCamAngle.degrees()) < 90
+        ):
+            # Skip tags that are not visible
+            continue
 
         # Compute the distance to the tag
         distance = rel.camToTargDist
@@ -150,27 +155,29 @@ class CameraConstraints:
 
 def scorePath(
     camera_transform: Transform3d,
-    constaints: CameraConstraints,
+    constraints: CameraConstraints,
     tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
 ) -> float:
+    print("Testing transform", camera_transform)
     total_score = 0.0
     for sample in samples:
         score = generate_score_for_camera(
             sample.pose,
             camera_transform,
-            constaints.horizFOV * pi / 180,
-            constaints.vertFOV * pi / 180,
-            constaints.maxDistance,
+            constraints.horizFOV * pi / 180,
+            constraints.vertFOV * pi / 180,
+            constraints.maxDistance,
             tags,
         )
         total_score += score
+    print("score:", total_score)
     return total_score
 
 
 def objective(
     x,
-    constaints: CameraConstraints,
+    constraints: CameraConstraints,
     tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
 ) -> float:
@@ -185,99 +192,14 @@ def objective(
         ),
     )
     return -scorePath(
-        camera_transform, constaints, tags, samples
+        camera_transform, constraints, tags, samples
     )  # we want to minimize, but actually maximize
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Camera Location Optimizer")
-    parser.add_argument(
-        "--version",
-        action="version",
-        version="cameraoptimizer version 1.0.0",
-    )
-    parser.add_argument(
-        "--path",
-        dest="path",
-        type=str,
-        help="Path to the input path file to optimize camera",
-    )
-    parser.add_argument(
-        "--constraints",
-        dest="constraints",
-        type=str,
-        help="Path to the constraints file",
-    )
-    args = parser.parse_args()
-
-    field = AprilTagFieldLayout.loadField(AprilTagField.k2025ReefscapeAndyMark)
-    constaints = CameraConstraints.fromJson(args.constraints)
-
-    # get the robot config from the file settings
-    config = RobotConfig.fromGUISettings()
-    paths = PathPlannerAuto.getPathGroupFromAutoFile(args.path)
-
-    samples: List[PathPlannerTrajectoryState] = []
-    for path in paths:
-        idealTrajectory = path.getIdealTrajectory(config)
-        if idealTrajectory is None:
-            print("Could not generate ideal trajectory for path:", path.name)
-            continue
-        totalTime = idealTrajectory.getTotalTimeSeconds()
-        print(f"Path: {path.name}, Total Time: {totalTime:.2f} seconds")
-        numSamples = int(totalTime / SAMPLE_INTERVAL) + 1
-
-        for i in range(numSamples):
-            t = i * SAMPLE_INTERVAL
-            samples.append(idealTrajectory.sample(t))
-
-    # Sample the trajectory and compute scores
-
-    # Optimize camera position and orientation
-
-    bounds = [
-        (constaints.minX, constaints.maxX),
-        (constaints.minY, constaints.maxY),
-        (constaints.minZ, constaints.maxZ),
-        (constaints.minPitch, constaints.maxPitch),
-        (constaints.minYaw, constaints.maxYaw),
-    ]
-    initial_guess = [
-        (constaints.minX + constaints.maxX) / 2,
-        (constaints.minY + constaints.maxY) / 2,
-        (constaints.minZ + constaints.maxZ) / 2,
-        (constaints.minPitch + constaints.maxPitch) / 2,
-        (constaints.minYaw + constaints.maxYaw) / 2,
-    ]
-
-    tagPoses = [tag.pose for tag in field.getTags()]
-
-    result = differential_evolution(
-        objective,
-        bounds,
-        args=(constaints, tagPoses, samples),
-    )
-    print(result)
-    print("Optimal Camera Position and Orientation:")
-    optimal_x = result.x
-    print(
-        f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
-    )
-
-    camera_transform = Transform3d(
-        optimal_x[0],
-        optimal_x[1],
-        optimal_x[2],
-        Rotation3d(
-            0,
-            np.radians(optimal_x[3]),
-            np.radians(optimal_x[4]),
-        ),
-    )
-
+def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transform3d):
     # export to a log file for viewing
-
-    datalog = DataLogWriter("OUTPUT.wpilog")
+    DataLogManager.start()
+    datalog = DataLogManager.getLog()
+    # datalog writing is bugged...
 
     timestampId = datalog.start("/Timestamp", "int64")
     botPoseId = datalog.start("/BotPose", "struct:" + wpistruct.getTypeName(Pose2d))
@@ -307,10 +229,108 @@ def main():
         camera_pose = pose2dTo3d(sample.pose) + camera_transform
 
         datalog.appendRaw(cameraPoseId, wpistruct.pack(camera_pose), t)
-
         datalog.flush()
 
     datalog.stop()
+    DataLogManager.stop()
+
+def main():
+    parser = argparse.ArgumentParser(description="Camera Location Optimizer")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="cameraoptimizer version 1.0.0",
+    )
+    parser.add_argument(
+        "--path",
+        dest="path",
+        type=str,
+        help="Path to the input path file to optimize camera",
+    )
+    parser.add_argument(
+        "--constraints",
+        dest="constraints",
+        type=str,
+        help="Path to the constraints file",
+    )
+    parser.add_argument(
+        "--tags", dest="tags", type=str, help="Path to apriltag layout JSON file"
+    )
+    args = parser.parse_args()
+
+    field = AprilTagFieldLayout(args.tags)
+    constraints = CameraConstraints.fromJson(args.constraints)
+
+    # get the robot config from the file settings
+    config = RobotConfig.fromGUISettings()
+    paths = PathPlannerAuto.getPathGroupFromAutoFile(args.path)
+
+    samples: List[PathPlannerTrajectoryState] = []
+    for path in paths:
+        idealTrajectory = path.getIdealTrajectory(config)
+        if idealTrajectory is None:
+            print("Could not generate ideal trajectory for path:", path.name)
+            continue
+        totalTime = idealTrajectory.getTotalTimeSeconds()
+        numSamples = int(totalTime / SAMPLE_INTERVAL) + 1
+
+        for i in range(numSamples):
+            t = i * SAMPLE_INTERVAL
+            samples.append(idealTrajectory.sample(t))
+
+    # Sample the trajectory and compute scores
+
+    # Optimize camera position and orientation
+
+    bounds = [
+        (constraints.minX, constraints.maxX),
+        (constraints.minY, constraints.maxY),
+        (constraints.minZ, constraints.maxZ),
+        (constraints.minPitch, constraints.maxPitch),
+        (constraints.minYaw, constraints.maxYaw),
+    ]
+    initial_guess = [
+        (constraints.minX + constraints.maxX) / 2,
+        (constraints.minY + constraints.maxY) / 2,
+        (constraints.minZ + constraints.maxZ) / 2,
+        (constraints.minPitch + constraints.maxPitch) / 2,
+        (constraints.minYaw + constraints.maxYaw) / 2,
+    ]
+
+    tagPoses = [tag.pose for tag in field.getTags()]
+
+    # result = minimize(
+    #     objective,
+    #     initial_guess,
+    #     args=(constraints, tagPoses, samples),
+    #     bounds=bounds,
+    #     method="L-BFGS-B",
+    # )
+    result = shgo(
+        objective,
+        bounds,
+        args=(constraints, tagPoses, samples),
+        options={"disp": True, "maxiter": 100},
+    )
+    print("Optimal Camera Position and Orientation:")
+    optimal_x = result.x
+    print(
+        f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
+    )
+
+    camera_transform = Transform3d(
+        optimal_x[0],
+        optimal_x[1],
+        optimal_x[2],
+        Rotation3d(
+            0,
+            np.radians(optimal_x[3]),
+            np.radians(optimal_x[4]),
+        ),
+    )
+
+    export(samples, camera_transform)
+
 
 
 if __name__ == "__main__":
