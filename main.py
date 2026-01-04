@@ -75,9 +75,9 @@ def generate_score_for_camera(
 
         # Compute the distance to the tag
         distance = rel.camToTargDist
-        # if distance > maxDistance:
-        #     # Skip tags that are too far
-        #     continue
+        if distance > maxDistance:
+            # Skip tags that are too far
+            continue
 
         # Compute the relative angle offset
         # Tag relative to camera's viewpoint
@@ -164,10 +164,7 @@ def scorePath(
             constaints.maxDistance,
             tags,
         )
-        if score != float("inf"):
-            total_score += score
-    if total_score == 0.0:
-        return float("inf")
+        total_score += score
     return total_score
 
 
@@ -187,7 +184,9 @@ def objective(
             np.radians(x[4]),
         ),
     )
-    return scorePath(camera_transform, constaints, tags, samples)
+    return -scorePath(
+        camera_transform, constaints, tags, samples
+    )  # we want to minimize, but actually maximize
 
 
 def main():
@@ -253,95 +252,65 @@ def main():
 
     tagPoses = [tag.pose for tag in field.getTags()]
 
-    fig = plt.figure()
-    x = np.arange(constaints.minPitch, constaints.maxPitch)
-    y = np.arange(constaints.minYaw, constaints.maxYaw)
-    xgrid, ygrid = np.meshgrid(x, y)
-    xy = np.stack([xgrid, ygrid])
-    # go through all points and create a 2d numpy array
-    zgrid = np.zeros(xgrid.shape)
-    print(xgrid.shape, xy.shape)
-    totalSamples = xgrid.shape[0] * xgrid.shape[1]
-    c = 0
-    for i in range(xgrid.shape[0]):
-        for j in range(xgrid.shape[1]):
-            c+=1
-            zgrid[i, j] = objective(
-                [
-                    initial_guess[0],
-                    initial_guess[1],
-                    initial_guess[2],
-                    xy[0, i, j],
-                    xy[1, i, j],
-                ],
-                constaints,
-                tagPoses,
-                samples,
-            )
-            print(zgrid[i,j])
-            print(c / totalSamples)
-
-    ax = fig.add_subplot(111)
-    im = ax.imshow(
-        zgrid,
-        extent=(
-            constaints.minPitch,
-            constaints.maxPitch,
-            constaints.minYaw,
-            constaints.maxYaw,
-        ),
-        origin="lower",
-        aspect="auto",
+    result = differential_evolution(
+        objective,
+        bounds,
+        args=(constaints, tagPoses, samples),
     )
-    plt.show()
+    print(result)
+    print("Optimal Camera Position and Orientation:")
+    optimal_x = result.x
+    print(
+        f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
+    )
 
-    # camera_transform = Transform3d(
-    #     optimal_x[0],
-    #     optimal_x[1],
-    #     optimal_x[2],
-    #     Rotation3d(
-    #         0,
-    #         np.radians(optimal_x[3]),
-    #         np.radians(optimal_x[4]),
-    #     ),
-    # )
+    camera_transform = Transform3d(
+        optimal_x[0],
+        optimal_x[1],
+        optimal_x[2],
+        Rotation3d(
+            0,
+            np.radians(optimal_x[3]),
+            np.radians(optimal_x[4]),
+        ),
+    )
 
     # export to a log file for viewing
 
-    # datalog = DataLogWriter("OUTPUT.wpilog")
+    datalog = DataLogWriter("OUTPUT.wpilog")
 
-    # timestampId = datalog.start("/Timestamp", "int64")
-    # botPoseId = datalog.start("/BotPose", "struct:" + wpistruct.getTypeName(Pose2d))
-    # cameraPoseId = datalog.start(
-    #     "/CameraPose", "struct:" + wpistruct.getTypeName(Pose3d)
-    # )
+    timestampId = datalog.start("/Timestamp", "int64")
+    botPoseId = datalog.start("/BotPose", "struct:" + wpistruct.getTypeName(Pose2d))
+    cameraPoseId = datalog.start(
+        "/CameraPose", "struct:" + wpistruct.getTypeName(Pose3d)
+    )
 
-    # def setupSchema(item):
-    #     schemaId = datalog.start(
-    #         "/.schema/struct:" + wpistruct.getTypeName(item), "structschema"
-    #     )
-    #     datalog.appendRaw(schemaId, wpistruct.getSchema(item).encode(), 0)
+    def setupSchema(item):
+        schemaId = datalog.start(
+            "/.schema/struct:" + wpistruct.getTypeName(item), "structschema"
+        )
+        datalog.appendRaw(schemaId, wpistruct.getSchema(item).encode(), 0)
 
-    # setupSchema(Pose2d)
-    # setupSchema(Translation2d)
-    # setupSchema(Rotation2d)
+    setupSchema(Pose2d)
+    setupSchema(Translation2d)
+    setupSchema(Rotation2d)
 
-    # setupSchema(Pose3d)
-    # setupSchema(Translation3d)
-    # setupSchema(Rotation3d)
-    # setupSchema(Quaternion)
+    setupSchema(Pose3d)
+    setupSchema(Translation3d)
+    setupSchema(Rotation3d)
+    setupSchema(Quaternion)
 
-    # for idx, sample in enumerate(samples):
-    #     t = int(idx * SAMPLE_INTERVAL * 1e6)
-    #     datalog.appendInteger(timestampId, t, t)
-    #     datalog.appendRaw(botPoseId, wpistruct.pack(sample.pose), t)
-    #     camera_pose = pose2dTo3d(sample.pose) + camera_transform
+    for idx, sample in enumerate(samples):
+        t = int(idx * SAMPLE_INTERVAL * 1e6)
+        datalog.appendInteger(timestampId, t, t)
+        datalog.appendRaw(botPoseId, wpistruct.pack(sample.pose), t)
+        camera_pose = pose2dTo3d(sample.pose) + camera_transform
 
-    #     datalog.appendRaw(cameraPoseId, wpistruct.pack(camera_pose), t)
+        datalog.appendRaw(cameraPoseId, wpistruct.pack(camera_pose), t)
 
-    #     datalog.flush()
+        datalog.flush()
 
-    # datalog.stop()
+    datalog.stop()
 
 
 if __name__ == "__main__":
