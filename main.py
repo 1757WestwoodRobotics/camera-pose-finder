@@ -1,7 +1,8 @@
 import argparse
 import json
 from dataclasses import dataclass
-from math import exp, hypot, pi, radians, sin
+from math import exp, hypot, pi, sin
+import matplotlib.pyplot as plt
 from typing import List
 from pathplannerlib.auto import PathPlannerAuto, RobotConfig
 from pathplannerlib.path import PathPlannerTrajectoryState
@@ -51,6 +52,56 @@ class CameraTargetRelation:
         )
 
 
+def generate_score_for_camera_tag(
+    camera_pose: Pose3d,
+    horizFOV: float,
+    vertFOV: float,
+    maxDistance: float,
+    apriltag_pose: Pose3d,
+) -> float:
+    rel = CameraTargetRelation(camera_pose, apriltag_pose)
+    if not (
+        abs(rel.camToTargYaw.radians()) < horizFOV / 2
+        and abs(rel.camToTargPitch.radians()) < vertFOV / 2
+        and abs(rel.targToCamAngle.degrees()) < 90
+    ):
+        # Skip tags that are not visible
+        return 0
+
+    # Compute the distance to the tag
+    distance = rel.camToTargDist
+    if distance > maxDistance:
+        # Skip tags that are too far
+        return 0
+
+    # Compute the relative angle offset
+    # Tag relative to camera's viewpoint
+    horiz_angle = rel.targToCamYaw.radians()
+    vert_angle = rel.targToCamPitch.radians()
+
+    # Check if the tag is within the camera's field of view
+    if abs(horiz_angle) > horizFOV / 2 or abs(vert_angle) > vertFOV / 2:
+        # Skip tags that are outside the FOV
+        return 0
+
+    # Compute the orientation alignment score for the tag
+    # Tags directly facing the camera are "on-axis"
+    orientation_score = sin(rel.targToCamAngle.radians()) ** 2
+
+    # Gaussian falloff for each axis based on distance from FOV center
+    horiz_falloff = exp(-(horiz_angle**2) / (2 * (horizFOV / 4) ** 2))
+    vert_falloff = exp(-(vert_angle**2) / (2 * (vertFOV / 4) ** 2))
+    fov_score = horiz_falloff * vert_falloff
+
+    # Distance score is inversely proportional to distance squared
+    distance_score = 1 / (distance**2)
+
+    # Combine factors
+    tag_score = distance_score * fov_score * (1 - orientation_score)
+
+    return tag_score
+
+
 def generate_score_for_camera(
     robot_pose: Pose2d,
     camera_transform: Transform3d,
@@ -69,46 +120,9 @@ def generate_score_for_camera(
 
     for tag in apriltag_poses:
         # Relation of the camera to the tag
-        rel = CameraTargetRelation(camera_pose, tag)
-        if not (
-            abs(rel.camToTargYaw.radians()) < horizFOV / 2
-            and abs(rel.camToTargPitch.radians()) < vertFOV / 2
-            and abs(rel.targToCamAngle.degrees()) < 90
-        ):
-            # Skip tags that are not visible
-            continue
-
-        # Compute the distance to the tag
-        distance = rel.camToTargDist
-        if distance > maxDistance:
-            # Skip tags that are too far
-            continue
-
-        # Compute the relative angle offset
-        # Tag relative to camera's viewpoint
-        horiz_angle = rel.targToCamYaw.radians()
-        vert_angle = rel.targToCamPitch.radians()
-
-        # Check if the tag is within the camera's field of view
-        if abs(horiz_angle) > horizFOV / 2 or abs(vert_angle) > vertFOV / 2:
-            # Skip tags that are outside the FOV
-            continue
-
-        # Compute the orientation alignment score for the tag
-        # Tags directly facing the camera are "on-axis"
-        orientation_score = sin(rel.targToCamAngle.radians()) ** 2
-
-        # Gaussian falloff for each axis based on distance from FOV center
-        horiz_falloff = exp(-(horiz_angle**2) / (2 * (horizFOV / 4) ** 2))
-        vert_falloff = exp(-(vert_angle**2) / (2 * (vertFOV / 4) ** 2))
-        fov_score = horiz_falloff * vert_falloff
-
-        # Distance score is inversely proportional to distance squared
-        distance_score = 1 / (distance**2)
-
-        # Combine factors
-        tag_score = distance_score * fov_score * (1 - orientation_score)
-
+        tag_score = generate_score_for_camera_tag(
+            camera_pose, horizFOV, vertFOV, maxDistance, tag
+        )
         # Accumulate total score
         total_score += tag_score
 
@@ -195,6 +209,7 @@ def objective(
         camera_transform, constraints, tags, samples
     )  # we want to minimize, but actually maximize
 
+
 def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transform3d):
     # export to a log file for viewing
     DataLogManager.start()
@@ -234,6 +249,7 @@ def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transfor
     datalog.stop()
     DataLogManager.stop()
 
+
 def main():
     parser = argparse.ArgumentParser(description="Camera Location Optimizer")
     parser.add_argument(
@@ -255,6 +271,12 @@ def main():
     )
     parser.add_argument(
         "--tags", dest="tags", type=str, help="Path to apriltag layout JSON file"
+    )
+    parser.add_argument(
+        "--map",
+        action="store_true",
+        default=False,
+        help="Display a map of all rotation values, will pick the midpoint of provided translation boundary",
     )
     args = parser.parse_args()
 
@@ -278,59 +300,75 @@ def main():
             t = i * SAMPLE_INTERVAL
             samples.append(idealTrajectory.sample(t))
 
-    # Sample the trajectory and compute scores
+    tagPoses = [tag.pose for tag in field.getTags()]
 
     # Optimize camera position and orientation
 
-    bounds = [
-        (constraints.minX, constraints.maxX),
-        (constraints.minY, constraints.maxY),
-        (constraints.minZ, constraints.maxZ),
-        (constraints.minPitch, constraints.maxPitch),
-        (constraints.minYaw, constraints.maxYaw),
-    ]
-    initial_guess = [
-        (constraints.minX + constraints.maxX) / 2,
-        (constraints.minY + constraints.maxY) / 2,
-        (constraints.minZ + constraints.maxZ) / 2,
-        (constraints.minPitch + constraints.maxPitch) / 2,
-        (constraints.minYaw + constraints.maxYaw) / 2,
-    ]
+    if args.map:
+        x = np.arange(constraints.minPitch, constraints.maxPitch, 5)
+        y = np.arange(constraints.minYaw, constraints.maxYaw, 5)
+        xgrid, ygrid = np.meshgrid(x, y)
+        xy = np.stack([xgrid, ygrid])
+        zgrid = np.zeros(xgrid.shape)
 
-    tagPoses = [tag.pose for tag in field.getTags()]
+        for i in range(xgrid.shape[0]):
+            for j in range(xgrid.shape[1]):
+                cam_transform = Transform3d(
+                    (constraints.minX + constraints.maxX) / 2,
+                    (constraints.minY + constraints.maxY) / 2,
+                    (constraints.minZ + constraints.maxZ) / 2,
+                    Rotation3d(0, np.radians(i), np.radians(j)),
+                )
+                zgrid[i, j] = scorePath(cam_transform, constraints, tagPoses, samples)
+        plt.matshow(zgrid)
+        plt.show()
 
-    # result = minimize(
-    #     objective,
-    #     initial_guess,
-    #     args=(constraints, tagPoses, samples),
-    #     bounds=bounds,
-    #     method="L-BFGS-B",
-    # )
-    result = shgo(
-        objective,
-        bounds,
-        args=(constraints, tagPoses, samples),
-        options={"disp": True, "maxiter": 100},
-    )
-    print("Optimal Camera Position and Orientation:")
-    optimal_x = result.x
-    print(
-        f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
-    )
+    else:
+        bounds = [
+            (constraints.minX, constraints.maxX),
+            (constraints.minY, constraints.maxY),
+            (constraints.minZ, constraints.maxZ),
+            (constraints.minPitch, constraints.maxPitch),
+            (constraints.minYaw, constraints.maxYaw),
+        ]
+        initial_guess = [
+            (constraints.minX + constraints.maxX) / 2,
+            (constraints.minY + constraints.maxY) / 2,
+            (constraints.minZ + constraints.maxZ) / 2,
+            (constraints.minPitch + constraints.maxPitch) / 2,
+            (constraints.minYaw + constraints.maxYaw) / 2,
+        ]
 
-    camera_transform = Transform3d(
-        optimal_x[0],
-        optimal_x[1],
-        optimal_x[2],
-        Rotation3d(
-            0,
-            np.radians(optimal_x[3]),
-            np.radians(optimal_x[4]),
-        ),
-    )
+        # result = minimize(
+        #     objective,
+        #     initial_guess,
+        #     args=(constraints, tagPoses, samples),
+        #     bounds=bounds,
+        #     method="L-BFGS-B",
+        # )
+        result = shgo(
+            objective,
+            bounds,
+            args=(constraints, tagPoses, samples),
+            options={"disp": True, "maxiter": 100},
+        )
+        print("Optimal Camera Position and Orientation:")
+        optimal_x = result.x
+        print(
+            f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
+        )
 
-    export(samples, camera_transform)
-
+        camera_transform = Transform3d(
+            optimal_x[0],
+            optimal_x[1],
+            optimal_x[2],
+            Rotation3d(
+                0,
+                np.radians(optimal_x[3]),
+                np.radians(optimal_x[4]),
+            ),
+        )
+        export(samples, camera_transform)
 
 
 if __name__ == "__main__":
