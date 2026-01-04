@@ -148,7 +148,7 @@ _MP_TAGS: Optional[list[Pose3d]] = None
 _MP_SAMPLES: Optional[list[Pose3d]] = None
 
 
-def _mp_worker_score(sample, constraints: CameraConstraints, tags) -> float:
+def _mp_worker_score(sample, constraints: CameraConstraints) -> float:
     """Worker function that scores a single sample by index using module globals.
 
     The worker is top-level so it can be used by multiprocessing pools. On Unix platforms
@@ -160,7 +160,7 @@ def _mp_worker_score(sample, constraints: CameraConstraints, tags) -> float:
         constraints.horizFOV * pi / 180,
         constraints.vertFOV * pi / 180,
         constraints.maxDistance,
-        [poseFromArray(tag) for tag in tags],
+        _MP_TAGS,
     )
     return score
 
@@ -228,8 +228,6 @@ def poseFromArray(arr) -> Pose3d:
 
 def scorePath_mp(
     camera_transform: Transform3d,
-    constaints: CameraConstraints,
-    tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
     pool,
 ) -> float:
@@ -241,23 +239,16 @@ def scorePath_mp(
     per-task arguments remain simple (just indices) and heavy pickling is avoided.
     """
 
-    global _MP_CONSTRAINTS, _MP_TAGS, _MP_SAMPLES
-    _MP_CONSTRAINTS = constaints
-    _MP_TAGS = tags
     _MP_SAMPLES = [pose2dTo3d(sample.pose) + camera_transform for sample in samples]
     # pose2d cannot be picked, process on both ends to make it so the data can be
     sample_array = [poseToArray(sample) for sample in _MP_SAMPLES]
 
     # Map over sample indices so only simple integers are sent to worker processes
-    tag_arr = [poseToArray(tag) for tag in tags]
-    score_func = partial(_mp_worker_score, constraints=constaints, tags=tag_arr)
+    score_func = partial(_mp_worker_score, constraints=_MP_CONSTRAINTS)
     results = pool.map(score_func, sample_array)
 
     total_score = np.sum(results)
 
-    # Clear globals to avoid holding references longer than necessary
-    _MP_CONSTRAINTS = None
-    _MP_TAGS = None
     _MP_SAMPLES = None
     print("Score:", total_score)
     return total_score
@@ -265,8 +256,6 @@ def scorePath_mp(
 
 def objective_mp(
     x,
-    constraints: CameraConstraints,
-    tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
     pool,
 ):
@@ -281,7 +270,7 @@ def objective_mp(
         ),
     )
 
-    return -scorePath_mp(camera_transform, constraints, tags, samples, pool)
+    return -scorePath_mp(camera_transform, samples, pool)
 
 
 def objective(
@@ -449,13 +438,18 @@ def main():
         # )
         max_workers = min(32, mp.cpu_count() or 1)
         if args.mp:
+            global _MP_TAGS, _MP_CONSTRAINTS
+            _MP_TAGS = tagPoses
+            _MP_CONSTRAINTS = constraints
             with mp.Pool(max_workers) as pool:
                 result = shgo(
-                    partial(objective_mp, pool=pool),
+                    partial(objective_mp, pool=pool, samples=samples),
                     bounds,
-                    args=(constraints, tagPoses, samples),
                     options={"disp": True, "maxiter": 100},
                 )
+            # Clear globals to avoid holding references longer than necessary
+            _MP_CONSTRAINTS = None
+            _MP_TAGS = None
         else:
             result = shgo(
                 objective,
