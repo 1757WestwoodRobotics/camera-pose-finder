@@ -145,7 +145,6 @@ class CameraConstraints:
 # Globals used by multiprocessing worker to access complex objects without pickling them on fork-based platforms
 _MP_CONSTRAINTS: Optional[CameraConstraints] = None
 _MP_TAGS: Optional[list[Pose3d]] = None
-_MP_SAMPLES: Optional[list[Pose3d]] = None
 
 
 def _mp_worker_score(sample, constraints: CameraConstraints) -> float:
@@ -231,7 +230,6 @@ def scorePath_mp(
     samples: list[PathPlannerTrajectoryState],
     pool,
 ) -> float:
-    print("Scoring", camera_transform)
     """Score a path by summing per-sample camera scores in parallel using multiprocessing.
 
     Uses a multiprocessing.Pool. On Unix, the default 'fork' start method allows child
@@ -248,9 +246,6 @@ def scorePath_mp(
     results = pool.map(score_func, sample_array)
 
     total_score = np.sum(results)
-
-    _MP_SAMPLES = None
-    print("Score:", total_score)
     return total_score
 
 
@@ -334,6 +329,79 @@ def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transfor
     DataLogManager.stop()
 
 
+def solve_camera_seq(
+    tagPoses: list[Pose3d],
+    constraints: CameraConstraints,
+    samples: list[PathPlannerTrajectoryState],
+) -> Transform3d:
+    bounds = [
+        (constraints.minX, constraints.maxX),
+        (constraints.minY, constraints.maxY),
+        (constraints.minZ, constraints.maxZ),
+        (constraints.minPitch, constraints.maxPitch),
+        (constraints.minYaw, constraints.maxYaw),
+    ]
+    result = shgo(
+        objective,
+        bounds,
+        args=(constraints, tagPoses, samples),
+        options={"disp": True, "maxiter": 10},
+    )
+    optimal_x = result.x
+
+    camera_transform = Transform3d(
+        optimal_x[0],
+        optimal_x[1],
+        optimal_x[2],
+        Rotation3d(
+            0,
+            np.radians(optimal_x[3]),
+            np.radians(optimal_x[4]),
+        ),
+    )
+    return camera_transform
+
+
+def solve_camera_mq(
+    tagPoses: list[Pose3d],
+    constraints: CameraConstraints,
+    samples: list[PathPlannerTrajectoryState],
+) -> Transform3d:
+    bounds = [
+        (constraints.minX, constraints.maxX),
+        (constraints.minY, constraints.maxY),
+        (constraints.minZ, constraints.maxZ),
+        (constraints.minPitch, constraints.maxPitch),
+        (constraints.minYaw, constraints.maxYaw),
+    ]
+    global _MP_TAGS, _MP_CONSTRAINTS
+    _MP_TAGS = tagPoses
+    _MP_CONSTRAINTS = constraints
+    max_workers = min(32, mp.cpu_count() or 1)
+    with mp.Pool(max_workers) as pool:
+        result = shgo(
+            partial(objective_mp, pool=pool, samples=samples),
+            bounds,
+            options={"disp": True, "maxiter": 10},
+        )
+    # Clear globals to avoid holding references longer than necessary
+    _MP_CONSTRAINTS = None
+    _MP_TAGS = None
+    optimal_x = result.x
+
+    camera_transform = Transform3d(
+        optimal_x[0],
+        optimal_x[1],
+        optimal_x[2],
+        Rotation3d(
+            0,
+            np.radians(optimal_x[3]),
+            np.radians(optimal_x[4]),
+        ),
+    )
+    return camera_transform
+
+
 def main():
     parser = argparse.ArgumentParser(description="Camera Location Optimizer")
     parser.add_argument(
@@ -363,10 +431,11 @@ def main():
         help="Display a map of all rotation values, will pick the midpoint of provided translation boundary",
     )
     parser.add_argument(
-        "--mp",
-        action="store_true",
+        "--single-threaded",
+        dest="mp",
+        action="store_false",
         default=True,
-        help="Enable multithreaded computation",
+        help="Compute single-threaded",
     )
     args = parser.parse_args()
 
@@ -398,82 +467,56 @@ def main():
         x = np.arange(constraints.minPitch, constraints.maxPitch, 5)
         y = np.arange(constraints.minYaw, constraints.maxYaw, 5)
         xgrid, ygrid = np.meshgrid(x, y)
-        xy = np.stack([xgrid, ygrid])
         zgrid = np.zeros(xgrid.shape)
 
-        for i in range(xgrid.shape[0]):
-            for j in range(xgrid.shape[1]):
-                cam_transform = Transform3d(
-                    (constraints.minX + constraints.maxX) / 2,
-                    (constraints.minY + constraints.maxY) / 2,
-                    (constraints.minZ + constraints.maxZ) / 2,
-                    Rotation3d(0, np.radians(i), np.radians(j)),
-                )
-                zgrid[i, j] = scorePath(cam_transform, constraints, tagPoses, samples)
-        plt.matshow(zgrid)
-        plt.show()
-
-    else:
-        bounds = [
-            (constraints.minX, constraints.maxX),
-            (constraints.minY, constraints.maxY),
-            (constraints.minZ, constraints.maxZ),
-            (constraints.minPitch, constraints.maxPitch),
-            (constraints.minYaw, constraints.maxYaw),
-        ]
-        initial_guess = [
-            (constraints.minX + constraints.maxX) / 2,
-            (constraints.minY + constraints.maxY) / 2,
-            (constraints.minZ + constraints.maxZ) / 2,
-            (constraints.minPitch + constraints.maxPitch) / 2,
-            (constraints.minYaw + constraints.maxYaw) / 2,
-        ]
-
-        # result = minimize(
-        #     objective,
-        #     initial_guess,
-        #     args=(constraints, tagPoses, samples),
-        #     bounds=bounds,
-        #     method="L-BFGS-B",
-        # )
-        max_workers = min(32, mp.cpu_count() or 1)
         if args.mp:
             global _MP_TAGS, _MP_CONSTRAINTS
             _MP_TAGS = tagPoses
             _MP_CONSTRAINTS = constraints
+            max_workers = min(32, mp.cpu_count() or 1)
             with mp.Pool(max_workers) as pool:
-                result = shgo(
-                    partial(objective_mp, pool=pool, samples=samples),
-                    bounds,
-                    options={"disp": True, "maxiter": 100},
-                )
-            # Clear globals to avoid holding references longer than necessary
-            _MP_CONSTRAINTS = None
-            _MP_TAGS = None
+                for i in range(xgrid.shape[0]):
+                    for j in range(xgrid.shape[1]):
+                        cam_transform = Transform3d(
+                            (constraints.minX + constraints.maxX) / 2,
+                            (constraints.minY + constraints.maxY) / 2,
+                            (constraints.minZ + constraints.maxZ) / 2,
+                            Rotation3d(
+                                0, np.radians(xgrid[i, j]), np.radians(ygrid[i, j])
+                            ),
+                        )
+                        zgrid[i, j] = scorePath_mp(cam_transform, samples, pool)
         else:
-            result = shgo(
-                objective,
-                bounds,
-                args=(constraints, tagPoses, samples),
-                options={"disp": True, "maxiter": 100},
-            )
-        print("Optimal Camera Position and Orientation:")
-        optimal_x = result.x
-        print(
-            f"X: {optimal_x[0]:.2f}, Y: {optimal_x[1]:.2f}, Z: {optimal_x[2]:.2f}, Pitch: {optimal_x[3]:.2f}, Yaw: {optimal_x[4]:.2f}"
-        )
+            for i in range(xgrid.shape[0]):
+                for j in range(xgrid.shape[1]):
+                    cam_transform = Transform3d(
+                        (constraints.minX + constraints.maxX) / 2,
+                        (constraints.minY + constraints.maxY) / 2,
+                        (constraints.minZ + constraints.maxZ) / 2,
+                        Rotation3d(0, np.radians(xgrid[i, j]), np.radians(ygrid[i, j])),
+                    )
+                    zgrid[i, j] = scorePath(
+                        cam_transform, constraints, tagPoses, samples
+                    )
 
-        camera_transform = Transform3d(
-            optimal_x[0],
-            optimal_x[1],
-            optimal_x[2],
-            Rotation3d(
-                0,
-                np.radians(optimal_x[3]),
-                np.radians(optimal_x[4]),
-            ),
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        im = ax.imshow(zgrid, interpolation="bilinear", cmap="turbo")
+        ax.set_xlabel("pitch")
+        ax.set_ylabel("yaw")
+        plt.show()
+
+    else:
+        if args.mp:
+            optimal_transform = solve_camera_mq(tagPoses, constraints, samples)
+        else:
+            optimal_transform = solve_camera_seq(tagPoses, constraints, samples)
+
+        print("Optimal Camera Position and Orientation:")
+        print(
+            f"X: {optimal_transform.x:.2f}, Y: {optimal_transform.y:.2f}, Z: {optimal_transform.z:.2f}, Pitch: {optimal_transform.rotation().y_degrees:.2f}, Yaw: {optimal_transform.rotation().z_degrees:.2f}"
         )
-        export(samples, camera_transform)
+        export(samples, optimal_transform)
 
 
 if __name__ == "__main__":
