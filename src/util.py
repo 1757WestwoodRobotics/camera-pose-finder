@@ -18,3 +18,7 @@ def poseToArray(pose: Pose3d):
 
 def arrayToPose(arr) -> Pose3d:
     return Pose3d(arr[0], arr[1], arr[2], Rotation3d(arr[3], arr[4], arr[5]))
+
+def mapRange(value, inMin, inMax, outMin, outMax):
+    # Map a value from one range to another
+    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin

@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center leave"
+            "pathName": "head on to right"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shootBall"
+            "pathName": "head on to left"
           }
         }
       ]
