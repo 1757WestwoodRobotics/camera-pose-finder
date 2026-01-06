@@ -1,9 +1,12 @@
 import argparse
 from dataclasses import dataclass
-from functools import partial
+from functools import partial, reduce
+from operator import add
 from math import cos, exp, hypot, pi, sin
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 from typing import List, Optional
+import numpy.typing as npt
 from pathplannerlib.auto import PathPlannerAuto, RobotConfig
 from pathplannerlib.path import PathPlannerTrajectoryState
 from robotpy_apriltag import AprilTagFieldLayout
@@ -23,10 +26,10 @@ from scipy.optimize import shgo
 import multiprocessing as mp
 import numpy as np
 from wpiutil import wpistruct
-from constraints import CameraConstraints
-from util import pose2dTo3d, poseToArray, arrayToPose
+from constraints import CameraConstraints, ConstraintsConfig
+from util import mapRange, pose2dTo3d, poseToArray, arrayToPose
 
-SAMPLE_INTERVAL = 0.02  # seconds
+SAMPLE_INTERVAL = 0.01  # seconds
 
 
 class CameraTargetRelation:
@@ -64,6 +67,8 @@ def generate_score_for_camera_tag(
     horizFOV: float,
     vertFOV: float,
     maxDistance: float,
+    minDistance: float,
+    tagSize: float,
     apriltag_pose: Pose3d,
 ) -> CameraTagScore:
     rel = CameraTargetRelation(camera_pose, apriltag_pose)
@@ -76,7 +81,9 @@ def generate_score_for_camera_tag(
         return CameraTagScore(can_see=False)
 
     # Compute the distance to the tag
-    distance = rel.camToTargDist
+    distance = max(
+        rel.camToTargDist, minDistance
+    )  # no better information comes from being closer than min distance
     if distance > maxDistance:
         # Skip tags that are too far
         return CameraTagScore(can_see=False)
@@ -85,30 +92,57 @@ def generate_score_for_camera_tag(
     # Tag relative to camera's viewpoint
     horiz_angle = rel.targToCamYaw.radians()
     vert_angle = rel.targToCamPitch.radians()
-
     # Check if the tag is within the camera's field of view
     if abs(horiz_angle) > horizFOV / 2 or abs(vert_angle) > vertFOV / 2:
         # Skip tags that are outside the FOV
         return CameraTagScore(can_see=False)
 
+    halfTag = tagSize / 2
+    upperLeft = (
+        rel.camToTarg + Transform3d(halfTag, 0, -halfTag, Rotation3d())
+    ).translation()
+    upperRight = (
+        rel.camToTarg + Transform3d(halfTag, 0, halfTag, Rotation3d())
+    ).translation()
+    lowerLeft = (
+        rel.camToTarg + Transform3d(-halfTag, 0, -halfTag, Rotation3d())
+    ).translation()
+    lowerRight = (
+        rel.camToTarg + Transform3d(-halfTag, 0, halfTag, Rotation3d())
+    ).translation()
+    # check if each point is within camera's fov
+    for point in [upperLeft, upperRight, lowerLeft, lowerRight]:
+        horiz_angle = Rotation2d(point.x, point.y).radians()
+        dist_xy = hypot(point.x, point.y)
+        vert_angle = Rotation2d(dist_xy, -point.z).radians()
+
+        if abs(horiz_angle) > horizFOV / 2 or abs(vert_angle) > vertFOV / 2:
+            # Skip tags that are outside the FOV
+            return CameraTagScore(can_see=False)
+
     # Compute the orientation alignment score for the tag
     # Tags directly facing the camera are "on-axis"
-    orientation_score = cos(rel.targToCamAngle.radians()) ** 2
+    # orientation_score = cos(rel.targToCamAngle.radians()) ** 2
+    orientation_score = pow(
+        (1 - pow(2 * rel.targToCamAngle.radians() / pi, 2)), 0.4
+    )  # tweak the 0.4 for how tolerant being off-axis is
 
     # Gaussian falloff for each axis based on distance from FOV center
-    horiz_falloff = exp(-(horiz_angle**2) / (2 * (horizFOV / 4) ** 2))
-    vert_falloff = exp(-(vert_angle**2) / (2 * (vertFOV / 4) ** 2))
+    horiz_falloff = exp(-(horiz_angle**4) / (2 * (horizFOV / 4) ** 2))
+    vert_falloff = exp(-(vert_angle**4) / (2 * (vertFOV / 4) ** 2))
+    # horiz_falloff = pow(1 - (2 * horiz_angle / horizFOV) ** 2, 0.5)
+    # vert_falloff = pow(1 - (2 * vert_angle / vertFOV) ** 2, 0.5)
     fov_score = horiz_falloff * vert_falloff
 
     return CameraTagScore(orientation_score, fov_score, distance, True)
 
 
 # Globals used by multiprocessing worker to access complex objects without pickling them on fork-based platforms
-_MP_CONSTRAINTS: Optional[CameraConstraints] = None
+_MP_CONSTRAINTS: Optional[ConstraintsConfig] = None
 _MP_TAGS: Optional[list[Pose3d]] = None
 
 
-def _mp_worker_score(sample, constraints: CameraConstraints) -> float:
+def _mp_worker_score(sample, constraints: ConstraintsConfig) -> float:
     """Worker function that scores a single sample by index using module globals.
 
     The worker is top-level so it can be used by multiprocessing pools. On Unix platforms
@@ -120,6 +154,8 @@ def _mp_worker_score(sample, constraints: CameraConstraints) -> float:
         constraints.horizFOV * pi / 180,
         constraints.vertFOV * pi / 180,
         constraints.maxDistance,
+        constraints.minDistance,
+        constraints.tagSize,
         _MP_TAGS,
     )
     return score
@@ -130,6 +166,8 @@ def generate_score_for_camera(
     horizFOV: float,
     vertFOV: float,
     maxDistance: float,
+    minDistance: float,
+    tagSize: float,
     apriltag_poses: list[Pose3d],
 ) -> float:
     # Get all AprilTag poses from the field layout
@@ -143,12 +181,14 @@ def generate_score_for_camera(
     for tag in apriltag_poses:
         # Relation of the camera to the tag
         tag_score = generate_score_for_camera_tag(
-            camera_pose, horizFOV, vertFOV, maxDistance, tag
+            camera_pose, horizFOV, vertFOV, maxDistance, minDistance, tagSize, tag
         )
         if tag_score.can_see:
             tag_total += 1
             total_distance += tag_score.distance
             total_score += tag_score.fov_score * tag_score.orientation_score
+            # total_score += tag_score.fov_score
+            # total_score += 1
         else:
             continue
     # use distances and total tags to prefer closer of more tags
@@ -156,7 +196,7 @@ def generate_score_for_camera(
         return 0
 
     average_distance = total_distance / tag_total
-    total_score *= tag_total * 1 / (pow(average_distance, 2))
+    total_score *= tag_total / (pow(average_distance, 2))
 
     return total_score
 
@@ -176,6 +216,8 @@ def scorePath(
             constraints.horizFOV * pi / 180,
             constraints.vertFOV * pi / 180,
             constraints.maxDistance,
+            constraints.minDistance,
+            constraints.tagSize,
             tags,
         )
         total_score += score
@@ -210,16 +252,15 @@ def scorePath_mp(
 def objective_mp(
     x,
     samples: list[PathPlannerTrajectoryState],
+    position: Translation3d,
     pool,
 ):
     camera_transform = Transform3d(
-        x[0],
-        x[1],
-        x[2],
+        position,
         Rotation3d(
             0,
-            np.radians(x[3]),
-            np.radians(x[4]),
+            np.radians(x[0]),
+            np.radians(x[1]),
         ),
     )
 
@@ -247,7 +288,28 @@ def objective(
     )  # we want to minimize, but actually maximize
 
 
-def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transform3d):
+def objective_multi_mp(
+    x,
+    positions: list[Translation3d],
+    samples: list[PathPlannerTrajectoryState],
+    pool,
+) -> float:
+    camera_transforms = [
+        Transform3d(
+            pos, Rotation3d(0, np.radians(x[idx * 2]), np.radians(x[idx * 2 + 1]))
+        )
+        for idx, pos in enumerate(positions)
+    ]
+    totalScore = 0
+    for transform in camera_transforms:
+        totalScore -= scorePath_mp(transform, samples, pool)
+
+    return totalScore
+
+
+def export(
+    samples: list[PathPlannerTrajectoryState], camera_transforms: list[Transform3d]
+):
     # export to a log file for viewing
     DataLogManager.start()
     datalog = DataLogManager.getLog()
@@ -255,9 +317,13 @@ def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transfor
 
     timestampId = datalog.start("/Timestamp", "int64")
     botPoseId = datalog.start("/BotPose", "struct:" + wpistruct.getTypeName(Pose2d))
-    cameraPoseId = datalog.start(
-        "/CameraPose", "struct:" + wpistruct.getTypeName(Pose3d)
-    )
+    cameraPoseIds = []
+    for idx, _ in enumerate(camera_transforms):
+        cameraPoseIds.append(
+            datalog.start(
+                f"/CameraPose{idx}", "struct:" + wpistruct.getTypeName(Pose3d)
+            )
+        )
 
     def setupSchema(item):
         schemaId = datalog.start(
@@ -278,53 +344,99 @@ def export(samples: list[PathPlannerTrajectoryState], camera_transform: Transfor
         t = int(idx * SAMPLE_INTERVAL * 1e6)
         datalog.appendInteger(timestampId, t, t)
         datalog.appendRaw(botPoseId, wpistruct.pack(sample.pose), t)
-        camera_pose = pose2dTo3d(sample.pose) + camera_transform
+        for idx, camera_transform in enumerate(camera_transforms):
+            camera_pose = pose2dTo3d(sample.pose) + camera_transform
 
-        datalog.appendRaw(cameraPoseId, wpistruct.pack(camera_pose), t)
+            datalog.appendRaw(cameraPoseIds[idx], wpistruct.pack(camera_pose), t)
         datalog.flush()
 
     datalog.stop()
     DataLogManager.stop()
 
 
-def solve_camera(
+def solve_cameras(
     tagPoses: list[Pose3d],
-    constraints: CameraConstraints,
+    constraints: ConstraintsConfig,
     samples: list[PathPlannerTrajectoryState],
-) -> Transform3d:
+) -> tuple[list[Transform3d], npt.NDArray]:
     bounds = [
-        (constraints.minX, constraints.maxX),
-        (constraints.minY, constraints.maxY),
-        (constraints.minZ, constraints.maxZ),
-        (constraints.minPitch, constraints.maxPitch),
-        (constraints.minYaw, constraints.maxYaw),
+        [
+            (constraint.minPitch, constraint.maxPitch),
+            (constraint.minYaw, constraint.maxYaw),
+        ]
+        for constraint in constraints.cameras
     ]
+    bounds = reduce(add, bounds, [])
+    print("Bounds:", bounds)
+
+    positions = [Translation3d(co.x, co.y, co.z) for co in constraints.cameras]
+    print("Positions:", positions)
+
     global _MP_TAGS, _MP_CONSTRAINTS
     _MP_TAGS = tagPoses
     _MP_CONSTRAINTS = constraints
     max_workers = min(32, mp.cpu_count() or 1)
     with mp.Pool(max_workers) as pool:
         result = shgo(
-            partial(objective_mp, pool=pool, samples=samples),
+            partial(
+                objective_multi_mp, pool=pool, samples=samples, positions=positions
+            ),
             bounds,
-            options={"disp": True, "maxiter": 10},
+            n=100,
+            iters=5,
+            sampling_method="sobol",
         )
     # Clear globals to avoid holding references longer than necessary
     _MP_CONSTRAINTS = None
     _MP_TAGS = None
     optimal_x = result.x
+    print(optimal_x)
+
+    camera_transforms = [
+        Transform3d(pos, Rotation3d(0, np.radians(pitch), np.radians(yaw)))
+        for pos, pitch, yaw in zip(positions, optimal_x[::2], optimal_x[1:][::2])
+    ]
+    return camera_transforms, result.xl
+
+
+def solve_camera(
+    tagPoses: list[Pose3d],
+    constraints: ConstraintsConfig,
+    camidx: int,
+    samples: list[PathPlannerTrajectoryState],
+) -> tuple[Transform3d, npt.NDArray]:
+    cam = constraints.cameras[camidx]
+    bounds = [
+        (cam.minPitch, cam.maxPitch),
+        (cam.minYaw, cam.maxYaw),
+    ]
+    print("Bounds:", bounds)
+
+    position = Translation3d(cam.x, cam.y, cam.z)
+    print("Position:", position)
+
+    global _MP_TAGS, _MP_CONSTRAINTS
+    _MP_TAGS = tagPoses
+    _MP_CONSTRAINTS = constraints
+    max_workers = min(32, mp.cpu_count() or 1)
+    with mp.Pool(max_workers) as pool:
+        result = shgo(
+            partial(objective_mp, pool=pool, samples=samples, position=position),
+            bounds,
+            # n=100,
+            # iters=5,
+            # sampling_method="sobol",
+        )
+    # Clear globals to avoid holding references longer than necessary
+    _MP_CONSTRAINTS = None
+    _MP_TAGS = None
+    optimal_x = result.x
+    print(optimal_x)
 
     camera_transform = Transform3d(
-        optimal_x[0],
-        optimal_x[1],
-        optimal_x[2],
-        Rotation3d(
-            0,
-            np.radians(optimal_x[3]),
-            np.radians(optimal_x[4]),
-        ),
+        position, Rotation3d(0, np.radians(optimal_x[0]), np.radians(optimal_x[1]))
     )
-    return camera_transform
+    return camera_transform, result.xl
 
 
 def main():
@@ -355,10 +467,22 @@ def main():
         default=False,
         help="Display a map of all rotation values, will pick the midpoint of provided translation boundary",
     )
+    parser.add_argument(
+        "--plotoptimal",
+        action="store_true",
+        default=False,
+        help="Plot the optimal locations, also includes map",
+    )
+    parser.add_argument(
+        "--seperate",
+        action="store_true",
+        default=False,
+        help="Seperate each camera and solve individually, as opposed to a combined camera solution",
+    )
     args = parser.parse_args()
 
     field = AprilTagFieldLayout(args.tags)
-    constraints = CameraConstraints.fromJson(args.constraints)
+    constraints = ConstraintsConfig.fromJson(args.constraints)
 
     # get the robot config from the file settings
     config = RobotConfig.fromGUISettings()
@@ -381,55 +505,109 @@ def main():
 
     # Optimize camera position and orientation
 
+    locallimits = np.zeros((1, 1))
+    if (not args.map) or args.plotoptimal:
+        if args.seperate:
+            optimal_transforms = []
+            locallimits = []
+            for i, _ in enumerate(constraints.cameras):
+                optimal_transform, locallimit = solve_camera(tagPoses, constraints, i, samples)
+                optimal_transforms.append(optimal_transform)
+                locallimits.extend(locallimit)
+            locallimits = np.array(locallimits)
+            print(locallimits)
+        else:
+            optimal_transforms, locallimits = solve_cameras(tagPoses, constraints, samples)
+            print(locallimits)
+        print("Optimal Camera Position and Orientation:")
+        for optimal_transform in optimal_transforms:
+            print(
+                f"X: {optimal_transform.x:.2f}, Y: {optimal_transform.y:.2f}, Z: {optimal_transform.z:.2f}, Pitch: {optimal_transform.rotation().y_degrees:.2f}, Yaw: {optimal_transform.rotation().z_degrees:.2f}"
+            )
+        export(samples, optimal_transforms)
     if args.map:
-        x = np.arange(constraints.minPitch, constraints.maxPitch, 5)
-        y = np.arange(constraints.minYaw, constraints.maxYaw, 5)
+        x = np.arange(
+            constraints.cameras[0].minPitch, constraints.cameras[0].maxPitch, 1
+        )
+        y = np.arange(constraints.cameras[0].minYaw, constraints.cameras[0].maxYaw, 1)
         xgrid, ygrid = np.meshgrid(x, y)
-        zgrid = np.zeros(xgrid.shape)
+        zgrid = np.zeros((len(constraints.cameras), *xgrid.shape))
 
         global _MP_TAGS, _MP_CONSTRAINTS
         _MP_TAGS = tagPoses
         _MP_CONSTRAINTS = constraints
         max_workers = min(32, mp.cpu_count() or 1)
         with mp.Pool(max_workers) as pool:
-            for i in range(xgrid.shape[0]):
-                for j in range(xgrid.shape[1]):
-                    cam_transform = Transform3d(
-                        (constraints.minX + constraints.maxX) / 2,
-                        (constraints.minY + constraints.maxY) / 2,
-                        (constraints.minZ + constraints.maxZ) / 2,
-                        Rotation3d(
-                            0, np.radians(xgrid[i, j]), np.radians(ygrid[i, j])
-                        ),
-                    )
-                    zgrid[i, j] = scorePath_mp(cam_transform, samples, pool)
-        # else:
-        #     for i in range(xgrid.shape[0]):
-        #         for j in range(xgrid.shape[1]):
-        #             cam_transform = Transform3d(
-        #                 (constraints.minX + constraints.maxX) / 2,
-        #                 (constraints.minY + constraints.maxY) / 2,
-        #                 (constraints.minZ + constraints.maxZ) / 2,
-        #                 Rotation3d(0, np.radians(xgrid[i, j]), np.radians(ygrid[i, j])),
-        #             )
-        #             zgrid[i, j] = scorePath(
-        #                 cam_transform, constraints, tagPoses, samples
-        #             )
+            for camidx, camera in enumerate(constraints.cameras):
+                print("Computing camera", camidx)
+                for i in range(xgrid.shape[0]):
+                    for j in range(xgrid.shape[1]):
+                        cam_transform = Transform3d(
+                            camera.x,
+                            camera.y,
+                            camera.z,
+                            Rotation3d(
+                                0, np.radians(xgrid[i, j]), np.radians(ygrid[i, j])
+                            ),
+                        )
+                        zgrid[camidx, i, j] = scorePath_mp(cam_transform, samples, pool)
 
         fig = plt.figure()
-        ax = fig.add_subplot(111)
-        im = ax.imshow(zgrid, interpolation="bilinear", cmap="turbo")
-        ax.set_xlabel("pitch")
-        ax.set_ylabel("yaw")
-        plt.show()
+        for i in range(zgrid.shape[0]):
+            ax = fig.add_subplot(zgrid.shape[0], 1, i + 1)
+            im = ax.imshow(zgrid[i].T, interpolation="bilinear", cmap="turbo")
+            ax.set_xlabel("yaw")
+            ax.set_ylabel("pitch")
+            ax.set_title(f"Camera {i}")
 
-    else:
-        optimal_transform = solve_camera(tagPoses, constraints, samples)
-        print("Optimal Camera Position and Orientation:")
-        print(
-            f"X: {optimal_transform.x:.2f}, Y: {optimal_transform.y:.2f}, Z: {optimal_transform.z:.2f}, Pitch: {optimal_transform.rotation().y_degrees:.2f}, Yaw: {optimal_transform.rotation().z_degrees:.2f}"
-        )
-        export(samples, optimal_transform)
+            ticks_x = ticker.FuncFormatter(
+                lambda x, pos: "{0:g}".format(
+                    mapRange(
+                        x,
+                        0,
+                        zgrid.shape[1],
+                        constraints.cameras[i].minYaw,
+                        constraints.cameras[i].maxYaw,
+                    )
+                )
+            )
+            ax.xaxis.set_major_formatter(ticks_x)
+
+            ticks_y = ticker.FuncFormatter(
+                lambda y, pos: "{0:g}".format(
+                    mapRange(
+                        y,
+                        0,
+                        zgrid.shape[2],
+                        constraints.cameras[i].minPitch,
+                        constraints.cameras[i].maxPitch,
+                    )
+                )
+            )
+            ax.yaxis.set_major_formatter(ticks_y)
+
+            if args.plotoptimal:
+                for j in range(locallimits.shape[0]):
+                    ax.plot(
+                        mapRange(
+                            locallimits[j, 2 * i + 1],
+                            constraints.cameras[i].minYaw,
+                            constraints.cameras[i].maxYaw,
+                            0,
+                            zgrid.shape[1],
+                        ),
+                        mapRange(
+                            locallimits[j, 2 * i],
+                            constraints.cameras[i].minPitch,
+                            constraints.cameras[i].maxPitch,
+                            0,
+                            zgrid.shape[2],
+                        ),
+                        "ro",
+                        ms=2,
+                    )
+
+        plt.show()
 
 
 if __name__ == "__main__":

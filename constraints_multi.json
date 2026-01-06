@@ -1,0 +1,60 @@
+{
+  "horizFOV": 82,
+  "vertFOV": 56.2,
+  "maxDistance": 5,
+  "minDistance": 0,
+  "tagSize": 0.1651,
+  "cameras": [
+    {
+      "position": {
+        "x": 0.215,
+        "y": 0.005,
+        "z": 0.221
+      },
+      "rotation": {
+        "pitch": {
+          "min": -45,
+          "max": 45
+        },
+        "yaw": {
+          "min": -90,
+          "max": 90
+        }
+      }
+    },
+    {
+      "position": {
+        "x": 0.203,
+        "y": -0.276,
+        "z": 0.228
+      },
+      "rotation": {
+        "pitch": {
+          "min": -45,
+          "max": 45
+        },
+        "yaw": {
+          "min": -90,
+          "max": 90
+        }
+      }
+    },
+    {
+      "position": {
+        "x": 0.203,
+        "y": 0.276,
+        "z": 0.228
+      },
+      "rotation": {
+        "pitch": {
+          "min": -45,
+          "max": 45
+        },
+        "yaw": {
+          "min": -90,
+          "max": 90
+        }
+      }
+    }
+  ]
+}
