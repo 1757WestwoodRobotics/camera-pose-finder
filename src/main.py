@@ -468,6 +468,13 @@ def main():
         help="Display a map of all rotation values, will pick the midpoint of provided translation boundary",
     )
     parser.add_argument(
+        "--map-resolution",
+        default=5,
+        dest="mres",
+        type=int,
+        help="The resolution to use, in degrees, when generating a map",
+    )
+    parser.add_argument(
         "--plotoptimal",
         action="store_true",
         default=False,
@@ -511,13 +518,17 @@ def main():
             optimal_transforms = []
             locallimits = []
             for i, _ in enumerate(constraints.cameras):
-                optimal_transform, locallimit = solve_camera(tagPoses, constraints, i, samples)
+                optimal_transform, locallimit = solve_camera(
+                    tagPoses, constraints, i, samples
+                )
                 optimal_transforms.append(optimal_transform)
                 locallimits.extend(locallimit)
             locallimits = np.array(locallimits)
             print(locallimits)
         else:
-            optimal_transforms, locallimits = solve_cameras(tagPoses, constraints, samples)
+            optimal_transforms, locallimits = solve_cameras(
+                tagPoses, constraints, samples
+            )
             print(locallimits)
         print("Optimal Camera Position and Orientation:")
         for optimal_transform in optimal_transforms:
@@ -525,11 +536,14 @@ def main():
                 f"X: {optimal_transform.x:.2f}, Y: {optimal_transform.y:.2f}, Z: {optimal_transform.z:.2f}, Pitch: {optimal_transform.rotation().y_degrees:.2f}, Yaw: {optimal_transform.rotation().z_degrees:.2f}"
             )
         export(samples, optimal_transforms)
+
     if args.map:
         x = np.arange(
-            constraints.cameras[0].minPitch, constraints.cameras[0].maxPitch, 1
+            constraints.cameras[0].minPitch, constraints.cameras[0].maxPitch, args.mres
         )
-        y = np.arange(constraints.cameras[0].minYaw, constraints.cameras[0].maxYaw, 1)
+        y = np.arange(
+            constraints.cameras[0].minYaw, constraints.cameras[0].maxYaw, args.mres
+        )
         xgrid, ygrid = np.meshgrid(x, y)
         zgrid = np.zeros((len(constraints.cameras), *xgrid.shape))
 
