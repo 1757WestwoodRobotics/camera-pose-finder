@@ -10,15 +10,15 @@ This project provides a tool used to optimize the position and angle of a camera
 ## Usage
 1. Clone the repository:
 ```bash
-git clone
+git clone https://github.com/1757WestwoodRobotics/camera-pose-finder
 ```
 2. Install dependencies:
 ```bash
 uv sync 
 ```
-3. Construct a constraints file in JSON format specifying camera location limits. 
+3. Construct a constraints file in JSON format specifying camera locations and angles to test. 
 
-An example file exists at `constraints.json`.
+An example file exists at `constraints_multi.json`.
 
 4. Construct a apriltag field layout JSON file specifying the vision targets. An example file exists at `2025-reefscape-no-barge.json`.
 
@@ -26,10 +26,19 @@ An example file exists at `constraints.json`.
 
 6. Run the optimizer with the following command:
 ```bash
-uv run main.py --constraints path/to/constraints.json --path name_of_auto_routine --tags path/to/apriltag/fieldlayout.json
+uv run src/main.py --constraints path/to/constraints.json --path name_of_auto_routine --tags path/to/apriltag/fieldlayout.json
 ```
 
 For example
 ```bash
-uv run main.py --constraints constraints.json --path "3 piece right" --tags 2025-reefscape-no-barge.json
+uv run src/main.py --constraints constraints_multi.json --path "dual approach" --tags 2025-reefscape-no-barge.json
 ```
+
+A couple of additional arguments exists:
+- `--map` generates an image visualization of the "score" across all possible camera angles
+    - `--map-resolution` can be used to specify with what resolution to render the map. The default is to take a sample every 5 degrees
+- `--plotoptimal` when combined with `--map` will also compute the complete optimal camera location and plot it on the generated map
+- `--seperate` can be used to generate seperate results for each camera's angles, compared to the overall optimal. This may be faster if there are many cameras to test
+
+## Output
+By default, upon completing any ideal computation, a wpilog file will be created. This file can be opened in AdvantageScope to visualize the results of the optimization. It is reccomended to view each camera pose as a camera override.
