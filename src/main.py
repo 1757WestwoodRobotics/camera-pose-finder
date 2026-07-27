@@ -122,7 +122,6 @@ def generate_score_for_camera_tag(
 
     # Compute the orientation alignment score for the tag
     # Tags directly facing the camera are "on-axis"
-    # orientation_score = cos(rel.targToCamAngle.radians()) ** 2
     orientation_score = pow(
         (1 - pow(2 * rel.targToCamAngle.radians() / pi, 2)), 0.4
     )  # tweak the 0.4 for how tolerant being off-axis is
@@ -130,25 +129,62 @@ def generate_score_for_camera_tag(
     # Gaussian falloff for each axis based on distance from FOV center
     horiz_falloff = exp(-(horiz_angle**4) / (2 * (horizFOV / 4) ** 2))
     vert_falloff = exp(-(vert_angle**4) / (2 * (vertFOV / 4) ** 2))
-    # horiz_falloff = pow(1 - (2 * horiz_angle / horizFOV) ** 2, 0.5)
-    # vert_falloff = pow(1 - (2 * vert_angle / vertFOV) ** 2, 0.5)
     fov_score = horiz_falloff * vert_falloff
 
     return CameraTagScore(orientation_score, fov_score, distance, True)
 
 
 # Globals used by multiprocessing worker to access complex objects without pickling them on fork-based platforms
+# NOTE: these hold a SINGLE camera's CameraConstraints (not the whole ConstraintsConfig),
+# since a worker only ever scores one camera's transform at a time.
 _MP_CONSTRAINTS: Optional[ConstraintsConfig] = None
 _MP_TAGS: Optional[list[Pose3d]] = None
+
+
+def _pose3d_to_array(pose: Pose3d) -> npt.NDArray[np.float64]:
+    """Convert a Pose3d to a plain, picklable array (translation xyz + rotation quaternion wxyz).
+
+    wpimath.geometry.Pose3d is a pybind11-wrapped C++ object and cannot be pickled at all,
+    so it can never cross a multiprocessing process boundary directly -- not as a task
+    argument, and not as a pool initializer argument either (both are pickled under the
+    'spawn' start method macOS/Windows use by default). Every Pose3d has to be reduced to
+    plain numbers before it leaves this process, and rebuilt with _array_to_pose3d on the
+    other side.
+    """
+    t = pose.translation()
+    q = pose.rotation().getQuaternion()
+    return np.array([t.X(), t.Y(), t.Z(), q.W(), q.X(), q.Y(), q.Z()])
+
+
+def _array_to_pose3d(arr) -> Pose3d:
+    """Inverse of _pose3d_to_array."""
+    return Pose3d(
+        Translation3d(arr[0], arr[1], arr[2]),
+        Rotation3d(Quaternion(arr[3], arr[4], arr[5], arr[6])),
+    )
+
+
+def _init_worker(tag_arrays: list[npt.NDArray[np.float64]]) -> None:
+    """Pool initializer: runs once in each worker process when it starts.
+
+    Unlike a plain module-level assignment made in the main process after the pool
+    already exists, an initializer's initargs ARE passed into the new process, so this
+    works correctly whether multiprocessing uses 'fork' (Linux) or 'spawn' (macOS/Windows
+    default). Setting it here means the tags only need to be reconstructed once per
+    worker, not once per task. tag_arrays must already be plain arrays (see
+    _pose3d_to_array) -- Pose3d itself can't survive the pickling spawn requires.
+    """
+    global _MP_TAGS
+    _MP_TAGS = [_array_to_pose3d(arr) for arr in tag_arrays]
 
 
 def _mp_worker_score(sample, constraints: ConstraintsConfig) -> float:
     """Worker function that scores a single sample by index using module globals.
 
-    The worker is top-level so it can be used by multiprocessing pools. On Unix platforms
-    the fork start method allows child processes to inherit the complex objects placed
-    in these globals without needing to pickle them per-task.
+    Runs inside a worker process started with _init_worker as the pool initializer,
+    so _MP_TAGS is guaranteed to already be set in this process.
     """
+    assert _MP_TAGS is not None, "_MP_TAGS must be set via the pool initializer"
     score = generate_score_for_camera(
         arrayToPose(sample),
         constraints.horizFOV * pi / 180,
@@ -187,8 +223,6 @@ def generate_score_for_camera(
             tag_total += 1
             total_distance += tag_score.distance
             total_score += tag_score.fov_score * tag_score.orientation_score
-            # total_score += tag_score.fov_score
-            # total_score += 1
         else:
             continue
     # use distances and total tags to prefer closer of more tags
@@ -203,7 +237,7 @@ def generate_score_for_camera(
 
 def scorePath(
     camera_transform: Transform3d,
-    constraints: CameraConstraints,
+    constraints: ConstraintsConfig,
     tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
 ) -> float:
@@ -236,9 +270,10 @@ def scorePath_mp(
     processes to inherit the complex objects placed into module-level globals so that
     per-task arguments remain simple (just indices) and heavy pickling is avoided.
     """
+    assert _MP_CONSTRAINTS is not None, "_MP_CONSTRAINTS must be set before scoring"
 
     _MP_SAMPLES = [pose2dTo3d(sample.pose) + camera_transform for sample in samples]
-    # pose2d cannot be picked, process on both ends to make it so the data can be
+    # pose2d cannot be pickled, process on both ends so only plain arrays cross the pool boundary
     sample_array = [poseToArray(sample) for sample in _MP_SAMPLES]
 
     # Map over sample indices so only simple integers are sent to worker processes
@@ -269,7 +304,7 @@ def objective_mp(
 
 def objective(
     x,
-    constraints: CameraConstraints,
+    constraints: ConstraintsConfig,
     tags: list[Pose3d],
     samples: list[PathPlannerTrajectoryState],
 ) -> float:
@@ -294,6 +329,9 @@ def objective_multi_mp(
     samples: list[PathPlannerTrajectoryState],
     pool,
 ) -> float:
+    # FOV/distance/tag-size constraints are shared across all cameras (they live on
+    # ConstraintsConfig, not CameraConstraints), so _MP_CONSTRAINTS is set once by the
+    # caller before optimization starts and never needs to change per camera here.
     camera_transforms = [
         Transform3d(
             pos, Rotation3d(0, np.radians(x[idx * 2]), np.radians(x[idx * 2 + 1]))
@@ -344,10 +382,10 @@ def export(
         t = int(idx * SAMPLE_INTERVAL * 1e6)
         datalog.appendInteger(timestampId, t, t)
         datalog.appendRaw(botPoseId, wpistruct.pack(sample.pose), t)
-        for idx, camera_transform in enumerate(camera_transforms):
+        for cam_idx, camera_transform in enumerate(camera_transforms):
             camera_pose = pose2dTo3d(sample.pose) + camera_transform
 
-            datalog.appendRaw(cameraPoseIds[idx], wpistruct.pack(camera_pose), t)
+            datalog.appendRaw(cameraPoseIds[cam_idx], wpistruct.pack(camera_pose), t)
         datalog.flush()
 
     datalog.stop()
@@ -358,7 +396,7 @@ def solve_cameras(
     tagPoses: list[Pose3d],
     constraints: ConstraintsConfig,
     samples: list[PathPlannerTrajectoryState],
-) -> tuple[list[Transform3d], npt.NDArray]:
+) -> tuple[list[Transform3d], npt.NDArray[np.float64]]:
     bounds = [
         [
             (constraint.minPitch, constraint.maxPitch),
@@ -372,25 +410,38 @@ def solve_cameras(
     positions = [Translation3d(co.x, co.y, co.z) for co in constraints.cameras]
     print("Positions:", positions)
 
-    global _MP_TAGS, _MP_CONSTRAINTS
-    _MP_TAGS = tagPoses
+    global _MP_CONSTRAINTS
     _MP_CONSTRAINTS = constraints
+    tag_arrays = [_pose3d_to_array(p) for p in tagPoses]
     max_workers = min(32, mp.cpu_count() or 1)
-    with mp.Pool(max_workers) as pool:
+    with mp.Pool(max_workers, initializer=_init_worker, initargs=(tag_arrays,)) as pool:
         result = shgo(
             partial(
-                objective_multi_mp, pool=pool, samples=samples, positions=positions
+                objective_multi_mp,
+                pool=pool,
+                samples=samples,
+                positions=positions,
             ),
             bounds,
             n=100,
             iters=5,
             sampling_method="sobol",
         )
-    # Clear globals to avoid holding references longer than necessary
+    # Clear global to avoid holding a reference longer than necessary
     _MP_CONSTRAINTS = None
-    _MP_TAGS = None
     optimal_x = result.x
     print(optimal_x)
+
+    if optimal_x is None:
+        raise RuntimeError(
+            "shgo did not converge to a solution (result.x is None, "
+            f"success={result.success!r}, message={result.message!r}). "
+            "This usually means the objective was flat everywhere it sampled -- i.e. "
+            "every candidate camera transform scored 0 because no tags were ever visible. "
+            "Double-check that the camera position units in your constraints file match "
+            "the field layout's units (meters) -- a camera placed outside the field bounds "
+            "will never see a tag and will always score 0."
+        )
 
     camera_transforms = [
         Transform3d(pos, Rotation3d(0, np.radians(pitch), np.radians(yaw)))
@@ -404,7 +455,7 @@ def solve_camera(
     constraints: ConstraintsConfig,
     camidx: int,
     samples: list[PathPlannerTrajectoryState],
-) -> tuple[Transform3d, npt.NDArray]:
+) -> tuple[Transform3d, npt.NDArray[np.float64]]:
     cam = constraints.cameras[camidx]
     bounds = [
         (cam.minPitch, cam.maxPitch),
@@ -415,11 +466,11 @@ def solve_camera(
     position = Translation3d(cam.x, cam.y, cam.z)
     print("Position:", position)
 
-    global _MP_TAGS, _MP_CONSTRAINTS
-    _MP_TAGS = tagPoses
+    global _MP_CONSTRAINTS
     _MP_CONSTRAINTS = constraints
+    tag_arrays = [_pose3d_to_array(p) for p in tagPoses]
     max_workers = min(32, mp.cpu_count() or 1)
-    with mp.Pool(max_workers) as pool:
+    with mp.Pool(max_workers, initializer=_init_worker, initargs=(tag_arrays,)) as pool:
         result = shgo(
             partial(objective_mp, pool=pool, samples=samples, position=position),
             bounds,
@@ -427,11 +478,21 @@ def solve_camera(
             # iters=5,
             # sampling_method="sobol",
         )
-    # Clear globals to avoid holding references longer than necessary
+    # Clear global to avoid holding a reference longer than necessary
     _MP_CONSTRAINTS = None
-    _MP_TAGS = None
     optimal_x = result.x
     print(optimal_x)
+
+    if optimal_x is None:
+        raise RuntimeError(
+            "shgo did not converge to a solution (result.x is None, "
+            f"success={result.success!r}, message={result.message!r}). "
+            "This usually means the objective was flat everywhere it sampled -- i.e. "
+            "every candidate camera transform scored 0 because no tags were ever visible. "
+            "Double-check that this camera's position units match the field layout's "
+            "units (meters) -- a camera placed outside the field bounds will never see "
+            "a tag and will always score 0."
+        )
 
     camera_transform = Transform3d(
         position, Rotation3d(0, np.radians(optimal_x[0]), np.radians(optimal_x[1]))
@@ -547,11 +608,11 @@ def main():
         xgrid, ygrid = np.meshgrid(x, y)
         zgrid = np.zeros((len(constraints.cameras), *xgrid.shape))
 
-        global _MP_TAGS, _MP_CONSTRAINTS
-        _MP_TAGS = tagPoses
+        global _MP_CONSTRAINTS
         _MP_CONSTRAINTS = constraints
+        tag_arrays = [_pose3d_to_array(p) for p in tagPoses]
         max_workers = min(32, mp.cpu_count() or 1)
-        with mp.Pool(max_workers) as pool:
+        with mp.Pool(max_workers, initializer=_init_worker, initargs=(tag_arrays,)) as pool:
             for camidx, camera in enumerate(constraints.cameras):
                 print("Computing camera", camidx)
                 for i in range(xgrid.shape[0]):

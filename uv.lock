@@ -19,9 +19,9 @@ dependencies = [
 requires-dist = [
     { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "pyside6", specifier = ">=6.10.1" },
-    { name = "robotpy-apriltag", specifier = ">=2025.3.2.3" },
-    { name = "robotpy-pathplannerlib", specifier = ">=2025.2.7" },
-    { name = "robotpy-wpimath", specifier = ">=2025.3.2.3" },
+    { name = "robotpy-apriltag", specifier = ">=2026.2.1" },
+    { name = "robotpy-pathplannerlib", specifier = ">=2026.1.1" },
+    { name = "robotpy-wpimath", specifier = ">=2026.2.1" },
     { name = "scipy", specifier = ">=1.16.3" },
 ]
 
@@ -427,7 +427,7 @@ wheels = [
 
 [[package]]
 name = "pyntcore"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-ntcore" },
@@ -435,16 +435,21 @@ dependencies = [
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f2/19/0ca0c203803b28580e706de33ee97394da14e8ec6247d540be4123fc3c67/pyntcore-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:59af976a2e00cdb0062d83d22e2ddf9e3f6384b9045bf9402fe1c6967e01caa1", size = 1170124, upload-time = "2025-06-02T03:47:38.188Z" },
-    { url = "https://files.pythonhosted.org/packages/04/fa/5b216c6bc5b1344a6fe2a5f273204a622b935fb6bddd8f95e3508d43ccfa/pyntcore-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:da8e70dcf3e2d044f357686f6d37e8372dc7f262852be232ac3e2d3c06faebca", size = 1171322, upload-time = "2025-06-02T03:47:39.809Z" },
-    { url = "https://files.pythonhosted.org/packages/cb/72/ffa97d4d66ad0439b7084b14d0a1ef3b21ec7a2a1790d844c4761adffc8d/pyntcore-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:417612ea0fa2c3ae446a4f9c12040f8d6fa12b281db849184d7311190942a027", size = 1481741, upload-time = "2025-06-02T03:47:41.577Z" },
-    { url = "https://files.pythonhosted.org/packages/f9/d5/6a56c9fcabd073051b28203304a4f279e12faaba0e202fd2d67bc21152cb/pyntcore-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:94f2c645f5fdbc06207d5bc0da309f2825e65f0022fd0fa175d0fa9efb0a53a6", size = 1331454, upload-time = "2025-06-02T03:47:43.456Z" },
-    { url = "https://files.pythonhosted.org/packages/32/92/a84e407fac3634e79be96b8f0e687e6feffe8aa6d2eeb0c01ee9cdfd614f/pyntcore-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:6b06d780506c461335987db3ee49d1a869f9eac6a7d7bf8132a4015492b39610", size = 726951, upload-time = "2025-06-02T03:47:45.226Z" },
-    { url = "https://files.pythonhosted.org/packages/5b/ec/63909ea9ffdffefffc35fc3116c2551306696a6c5da010f7fe1eb2072606/pyntcore-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:62eb2222abf2d7cde065abd30aa45e7e920544a22dece7582ab7697e00f486ca", size = 1169945, upload-time = "2025-06-02T03:47:46.911Z" },
-    { url = "https://files.pythonhosted.org/packages/9d/19/d6cf46446c0a2c1d82400d5c8f296891a5bc78b4e01746dd5553590ad792/pyntcore-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:3f2e1b7b2d20d9452c0712337065526f4a84dab56d36c060d63297102ac2c117", size = 1171074, upload-time = "2025-06-02T03:47:52.292Z" },
-    { url = "https://files.pythonhosted.org/packages/ab/2e/e66bc4dbab8d45f72b786029a2ba84eb3afa7ac8b727269d73ee6050dae1/pyntcore-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:d5c09bb9898926df15da1593befce6d4d6073d466d137ea339c6c48bbf49a06b", size = 1480896, upload-time = "2025-06-02T03:47:53.628Z" },
-    { url = "https://files.pythonhosted.org/packages/e5/c5/37a4640a56e039cf4c11fd9f77aed261cc91d3c85ddd29a45ae815a28510/pyntcore-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:70f65b0014536318dafb6cdb56b97a845679ad876da30fb54d784a068eaf9a8e", size = 1328518, upload-time = "2025-06-02T03:47:55.03Z" },
-    { url = "https://files.pythonhosted.org/packages/ea/66/7fb2220fb36a633f1297aa0507a3f0e74e4332118d2070b21c729bec2e55/pyntcore-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:5743e8087f020889a4c321566b72d592bdcc43277406fff2f22b6c4a96b62724", size = 726956, upload-time = "2025-06-02T03:47:56.47Z" },
+    { url = "https://files.pythonhosted.org/packages/76/25/e896dd03b899a4375f314365dbbdff57e93076b8932a9a7abb88568b7be8/pyntcore-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:1f48a9a51754e772fdafc9170c4d8ea25d349691c5453bfbc0c4095d8d8f026a", size = 1185901, upload-time = "2026-03-13T02:29:36.927Z" },
+    { url = "https://files.pythonhosted.org/packages/d8/54/8c15539e7761b0a57819c95261e14c7c896b979f4cb7249f45ac559f4227/pyntcore-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:59242ed292d9f2ffe7586c0ea88228db84020eb3a508911cbbacf4bbdf152aee", size = 1180339, upload-time = "2026-03-13T02:29:38.318Z" },
+    { url = "https://files.pythonhosted.org/packages/5c/8f/e6dea5eb5bc14b4f48941cbad2c0d99c706b226b80451a791d462fe60079/pyntcore-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:075f740d230e691ef60d6cdc2e2b6f35dafe34b522a91bc06c74c145af720416", size = 1350679, upload-time = "2026-03-13T02:29:39.561Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/a4/357b1a3c0d0730f1c6250683768336988a4012809575bd67fbae494382b7/pyntcore-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:ada2584a026e5ce4d0b25f60f2d9511228258e12b74e1c0b2889323e0e303301", size = 1526914, upload-time = "2026-03-13T02:29:41.189Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/ee/c63c6df2ed61061a01f2fd1d59c19d6ac2fa54daa897cae05ea6427a8d4e/pyntcore-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:667e0a9fb4527dadc0053e87c407b6569a0736153bf52886c6c93bed39cd5c38", size = 701988, upload-time = "2026-03-13T02:29:42.668Z" },
+    { url = "https://files.pythonhosted.org/packages/ee/f6/040c0d1106ea5b8fc00a24ac044fc00f80a5a645795e882cf4d1aeb2095c/pyntcore-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:da3d15e992a315e62681fb581b2f34a2405834a0cdf94f13666c8d9d6239840b", size = 1186227, upload-time = "2026-03-13T02:29:43.878Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/a0/1b2c160e21fe8dc671cc01e9f519c0a20bee30d12d753a105809e2e5c9d8/pyntcore-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:16026ed59667d86043253868f38b03fcf00d524976799a467bcb11ef759b872e", size = 1180289, upload-time = "2026-03-13T02:29:45.439Z" },
+    { url = "https://files.pythonhosted.org/packages/14/ad/966c27a4ed80088380a94812cd9b5e660bc5b6bed767e33195788d149073/pyntcore-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:6cf1a11fdd2e85e183ec40c5dce5e06be23cca97e409095935781c29d1f7e8c5", size = 1352324, upload-time = "2026-03-13T02:29:46.776Z" },
+    { url = "https://files.pythonhosted.org/packages/ba/d2/977a53ee842cb12885bdb51dfbcd18f4845ddda0e51c7b08dd02ca270d6a/pyntcore-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:26b2031390741ddd12b6b86925bf96e15f8bf6d75382893d3d2742d285b32a96", size = 1525817, upload-time = "2026-03-13T02:29:47.956Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/17/728ecf2d13742c45579fc0883bf94f5214c782649d3a11f07ab9ef211f91/pyntcore-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:822766ef675d79f871ae0af07e906b13b71c8382a7f6ec012ff7e78c964d107c", size = 701910, upload-time = "2026-03-13T02:29:49.678Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/e3/780d7ec9c8f5eaa8ba299a781594665404d48322ce70f265618b4196fddf/pyntcore-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:886c55151d320b76f0fbca5fabcf4e725136eddb2440cadd42186b3758378d0d", size = 1171304, upload-time = "2026-03-13T02:29:51.01Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/28/529be77f7b4300bca46477298a771d1070c4058f90c0a756f52dd82f4ebe/pyntcore-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:bc3c54904c1362fdf0fc5f4269ce1287620e06548003b5bf537cda51854bc56b", size = 1177211, upload-time = "2026-03-13T02:29:52.503Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/8f/d7ad84009674626389ba7d772f967f19a5502b3c4d01fbbad28787b6be23/pyntcore-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:c92a53d35192aae43db9fe54ec7355db55b7b5d05d5a98caa4039206b247fbe3", size = 1355140, upload-time = "2026-03-13T02:29:53.789Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/74/164cfd33493f853ac396824c12aedf6dc86547affbc930e6f126471e8b6f/pyntcore-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:d96ffee8b29c8a548c7d57a8dc0093e8c1415dd8e1d68ff41b68aff6c23b150f", size = 1526972, upload-time = "2026-03-13T02:29:55.077Z" },
+    { url = "https://files.pythonhosted.org/packages/b1/e5/fe5cd451338fcb216b082cf3de4d075aef7666c12ba87e5d39143bd8faae/pyntcore-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:032173e8123d5a1b7dbc5e2e6ca92287f87ff86fb20107a1eaf79ba311a16c22", size = 718989, upload-time = "2026-03-13T02:29:56.648Z" },
 ]
 
 [[package]]
@@ -518,7 +523,7 @@ wheels = [
 
 [[package]]
 name = "robotpy-apriltag"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-apriltag" },
@@ -526,108 +531,117 @@ dependencies = [
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/86/7d/f1498a756c60d197dfc4763ec62b418bd69e7d71b499e98291498f85844b/robotpy_apriltag-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:c3da1586ee4b9ace609796a7205d1ba20c389da0f079c12e2f69f020b96ab7b0", size = 232205, upload-time = "2025-06-02T03:48:15.578Z" },
-    { url = "https://files.pythonhosted.org/packages/40/d7/fb6515a061cda22de48d60cef7977cd74d26e09cad3d234e41c60d7590e2/robotpy_apriltag-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:f91c7b87b9d0a53752e6f3f65d670db8562558aee40e0632f72288c94d5e45f5", size = 238610, upload-time = "2025-06-02T03:48:16.864Z" },
-    { url = "https://files.pythonhosted.org/packages/1f/59/f17f10f0a1abd68bdc3774731f8f21f1d68b00fab139689359fa5ecdd050/robotpy_apriltag-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:c94a8f0cd89e0a4aa0a9915981b73bbda86b6afea61822ef6dc2587737e82e5d", size = 281415, upload-time = "2025-06-02T03:48:18.772Z" },
-    { url = "https://files.pythonhosted.org/packages/a4/23/e249e539686ff16e113166e9b304bc3414ecc32fcd0e7cbd631bf46d8bab/robotpy_apriltag-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:d5f679fc419f4792b04df69a97f7e4d342c0e896d5a43b580dd8edde6229649f", size = 257251, upload-time = "2025-06-02T03:48:20.39Z" },
-    { url = "https://files.pythonhosted.org/packages/ce/a5/af5d17ccf02a206bd8c136664a325fe0becdcdaac317fa0ad0d818f43614/robotpy_apriltag-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:43fa563dfa0e3a49badfd9a9d3c20d9443fb70e71ab0c9927b0f67924773d1cb", size = 174915, upload-time = "2025-06-02T03:48:22.024Z" },
-    { url = "https://files.pythonhosted.org/packages/16/90/c8603ccf33e6439d7a49b6320e8a698966bbaad2d0ad89671a361e80f721/robotpy_apriltag-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:d2f095814f96da4cfc7f645392b0be9b630e940a2b370cea1b3771ca8c32c290", size = 232335, upload-time = "2025-06-02T03:48:23.6Z" },
-    { url = "https://files.pythonhosted.org/packages/a1/49/8d90d0759d02d427bb4f3b5f90545e100cc7831f7f994f91749d3bb85b73/robotpy_apriltag-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:cf434481e7aeec80350d881a4efced8460e0bc09113bdd9f463df49675f6c734", size = 238704, upload-time = "2025-06-02T03:48:24.822Z" },
-    { url = "https://files.pythonhosted.org/packages/78/e4/ff01fd85740ae701e72154f6ed5e6ae22ff4423c8848030ae67115ea5e2d/robotpy_apriltag-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:15d19cd59842c7dc43eef7b9e74b6edf3c4687d4ba5d4ca39a536c43ce971379", size = 279596, upload-time = "2025-06-02T03:48:26.549Z" },
-    { url = "https://files.pythonhosted.org/packages/a9/ca/ebd645022d8c87fa1dc75080b4e4985d28388ca0f25b4f557e390de5209b/robotpy_apriltag-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:1fd1efd552bebe01f1643a143b5afad7dc788c9b854ac025f4560f0d48436ab7", size = 257997, upload-time = "2025-06-02T03:48:28.351Z" },
-    { url = "https://files.pythonhosted.org/packages/14/ee/01721fe1d90e3b414d0b22a0526366ffdcef347f697675474486cac64245/robotpy_apriltag-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:4e19166d462dad2cfd92f5c2b25a93217c18c2d9ec27c18c992b8df1972bd1f3", size = 174861, upload-time = "2025-06-02T03:48:29.599Z" },
+    { url = "https://files.pythonhosted.org/packages/70/03/8159e9279a3a079615c1f78f7c19457866a0fd742bb62235ecb401791478/robotpy_apriltag-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:1f9169df1ce02eec90ddaf8546fcfb8caacf3f240dd3788e5a9817c0c999e5b3", size = 249226, upload-time = "2026-03-13T02:30:09.357Z" },
+    { url = "https://files.pythonhosted.org/packages/27/56/7e7164de06f196d709743d6dcb305d36e6855c318cda0e37fd779f71d32c/robotpy_apriltag-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:5c6e35ba3519eb61c143439391bd4d03dc170b74319acf6f0f40432d89c9c897", size = 249164, upload-time = "2026-03-13T02:30:10.765Z" },
+    { url = "https://files.pythonhosted.org/packages/0b/83/13c42a59523828aa6e5a3d5b7842c96d9aaf9809b0c0d651301dffe33fc8/robotpy_apriltag-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:162d0ca0653c107ffcdac0ffad26c5434c11825ca95d52ddbe8c0c93e68f350f", size = 280815, upload-time = "2026-03-13T02:30:11.883Z" },
+    { url = "https://files.pythonhosted.org/packages/13/1c/bf0c6e7e048d9c3d11521c71b348468f04036cb42ac06352e2ccaae10367/robotpy_apriltag-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:9ebc52142ba665adc8afa0d18ba28aae7e0d0c75ad22fa3fcd9b6561c3e94fd6", size = 308953, upload-time = "2026-03-13T02:30:13.005Z" },
+    { url = "https://files.pythonhosted.org/packages/48/26/09b3dce8e4376777619f84d981e0bbba1975c71d30c11a714ea8b852aa93/robotpy_apriltag-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:a409bbf2a0b5199da3ff4b95d3d76c074060440ef1f8ac6db758e02173a6a67a", size = 184813, upload-time = "2026-03-13T02:30:14.117Z" },
+    { url = "https://files.pythonhosted.org/packages/99/eb/1b0c6e5377634920bb21f08b6fd06f68cfba47733d5edf9a3223dd80b8c4/robotpy_apriltag-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:7da71b4768ce89fe7e79fced1063c280493f1eca18d53d5575aa3d83b24eff0f", size = 249237, upload-time = "2026-03-13T02:30:15.164Z" },
+    { url = "https://files.pythonhosted.org/packages/26/29/7b25ab4893cb935f923376f5c2162689e8d1057a7feba36457e5f475b4a6/robotpy_apriltag-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:90bbf09cb2007e0d2331c7bdc6869cc6094d8e832b043ae8c8a20dceeaff5389", size = 249163, upload-time = "2026-03-13T02:30:16.287Z" },
+    { url = "https://files.pythonhosted.org/packages/fe/38/42a213771d1044b51a53c854e45954aebe049a49efbeaa2ee0a969973476/robotpy_apriltag-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:da7f5f74b96105b3600e55af22b84a09ca8cd5e47227b6474b1787ea5d2008c7", size = 280510, upload-time = "2026-03-13T02:30:17.399Z" },
+    { url = "https://files.pythonhosted.org/packages/fe/d8/f90404d22f83d87d7a146131d2302c53f47af64e1d5a1c15d1d82bd73097/robotpy_apriltag-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:a81bdd2022b419622a6dab97d24176ced7fbd33035ca97bf685e49ca87314f53", size = 308789, upload-time = "2026-03-13T02:30:18.759Z" },
+    { url = "https://files.pythonhosted.org/packages/95/29/cd9beb73a159bb47d53d968e90d38f11828548fdb96545337061a310bcf9/robotpy_apriltag-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:280d94365dd3576cc3b3a852c931f1d6a676cdb666bde8c9fdca5ca4c6bf865b", size = 184829, upload-time = "2026-03-13T02:30:19.916Z" },
+    { url = "https://files.pythonhosted.org/packages/86/df/1ea0e445496649917ca641719d614e3ac9b0f3e026f4a096eacb84579e6e/robotpy_apriltag-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:d9e4a734aa58d5e74179fb726d36a0b7a7baa2618b409d5ebe0710949f5def4f", size = 247653, upload-time = "2026-03-13T02:30:21.457Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/87/2115ac57afb1b429866b0cabaab881256f54b61060d99ce06710cbc8843c/robotpy_apriltag-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:dbba65191d7994a6961110851ed574d28eb7088c8ede78ab6f0eead66e9eddf8", size = 249183, upload-time = "2026-03-13T02:30:22.928Z" },
+    { url = "https://files.pythonhosted.org/packages/89/0a/5267511e61c85cd79dafb915f5918198eef1b99e6e290a0876eff399c680/robotpy_apriltag-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:784524ccb426e2aa93dad4c4b7d7f9beb13e00b74435462e686e26848567462a", size = 281873, upload-time = "2026-03-13T02:30:24.08Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/c6/fd55c0dd384d77589566c2cf5125da56046ec73dfd05b2de9db3b818d770/robotpy_apriltag-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:b83390a67e4efbc7c42ce4c81e6e246fa5ebce0d18baa7d4f98a17841da16fae", size = 309155, upload-time = "2026-03-13T02:30:25.206Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/be/d32c2e6966bbb8c94ed5f2bb98c448d1dbb94bdc4c8b46f3039756011660/robotpy_apriltag-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:c45afddb46f05dede28d24196cc68986770e6a8b27a71825c0db2c194449a6ac", size = 190321, upload-time = "2026-03-13T02:30:26.429Z" },
 ]
 
 [[package]]
 name = "robotpy-cli"
-version = "2024.0.0"
+version = "2026.0.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/05/5b/c4a0fa243bdf1ea4ab617cdbd396c4505d99c2a686328b99174146fba356/robotpy-cli-2024.0.0.tar.gz", hash = "sha256:e6519f06856eb0a7ef5f25a57bfc8dcb20635cef84706fb37c0b602d59e33f39", size = 8662, upload-time = "2024-01-06T11:12:34.348Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/17/d0e27b4703ae02e3e049c4c99ee10198a9c846cc8f4939cdde4737e24a12/robotpy_cli-2026.0.1.tar.gz", hash = "sha256:103195e8f284ef321bb0df21c8b4fa79cf6925f552a1a11d8030f61b78b88cd5", size = 7973, upload-time = "2026-01-08T03:22:43.201Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/26/1f/f9111df56aabd0a262983c7b1f9b60ec5dbbe2a755ec786c264279e2ee92/robotpy_cli-2024.0.0-py3-none-any.whl", hash = "sha256:9284035fa67058b33593b1846e13501eda0861fb9d9adce4bd01b101c9f1f26e", size = 8891, upload-time = "2024-01-06T11:12:32.568Z" },
+    { url = "https://files.pythonhosted.org/packages/47/c3/8acbbdf89f69afcd346c1a4f7776c865f80ea124006c304e801802c7601a/robotpy_cli-2026.0.1-py3-none-any.whl", hash = "sha256:b5e7e6df0346f7606bad630b78d5251f9e33f4440a47db948425a4716032d41a", size = 8974, upload-time = "2026-01-08T03:22:41.748Z" },
 ]
 
 [[package]]
 name = "robotpy-commands-v2"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
     { name = "wpilib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/12/96eb32bf8dab32b7ac2a1f2719a7e4959deb0efeb69be00a7889de70f13a/robotpy_commands_v2-2025.3.2.tar.gz", hash = "sha256:35379703d213b9b8b617715a2fb00acd7e5432884507340cb022acd9d6359b43", size = 57915, upload-time = "2025-03-19T05:14:48.73Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/58/ae/0932e133ad02f2d22a73266ce0b8a9614e89ab20f7c218f7b889341e8a31/robotpy_commands_v2-2025.3.2-py3-none-any.whl", hash = "sha256:b1bb4e0344870ef00f74f28f093a1c50544227fd5747b879aca5e9e5dca5a4e9", size = 60695, upload-time = "2025-03-19T05:14:47.366Z" },
+    { url = "https://files.pythonhosted.org/packages/22/b5/04fc496db361f04131e793b8a668fdca0044e1fc107f1f2bb1dc3686d9d1/robotpy_commands_v2-2026.2.2-py3-none-any.whl", hash = "sha256:c06cde371d2c605b3bde0156ee8939eb94e0ec0f9d2710692028519ca00714d4", size = 60750, upload-time = "2026-03-13T02:30:27.65Z" },
 ]
 
 [[package]]
 name = "robotpy-hal"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpihal" },
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/98/7655cd703d0dca9dc8c42c42832e29b829fbe2608f7a97165ee07426b7eb/robotpy_hal-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:6118ef12d870db84666b81fb37f8393bb5746c776a1728175644c942274204aa", size = 899124, upload-time = "2025-06-02T03:49:29.256Z" },
-    { url = "https://files.pythonhosted.org/packages/28/25/7cc43cb3f9d059fbe13f9e194cc0bd7e0019961d0855bcab17cd726cd015/robotpy_hal-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:93b488804dcad86426718f5df8298f6caaa1a2878f9b3423b5c762fba679466f", size = 895653, upload-time = "2025-06-02T03:49:30.704Z" },
-    { url = "https://files.pythonhosted.org/packages/ef/cf/1ba189e971069631176f140f74f234616260907541e74123d0a4949e13bf/robotpy_hal-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:cf175a9603190551124d2875415f7ef39304ff8354f1f5bfd4ea4f5af69ec1a4", size = 1111411, upload-time = "2025-06-02T03:49:32.062Z" },
-    { url = "https://files.pythonhosted.org/packages/a1/f5/caef8d6a0f44e1152a098d5b6e569b5ca6a05cc1d32e59ddea896a77c4fb/robotpy_hal-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:a7e764ca38c1e48181334abf5b4258abae48bab67a3d69e173e7909597836694", size = 992987, upload-time = "2025-06-02T03:49:33.436Z" },
-    { url = "https://files.pythonhosted.org/packages/c1/9b/2adc5dbc82293a51b3535e02d183794d0530776c43f42697b4dd8b8229a8/robotpy_hal-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:47e691c0a7c5ddb10ca086cd9cc1ccec30ccc9fda611308722912c435b5b49b2", size = 589913, upload-time = "2025-06-02T03:49:35.06Z" },
-    { url = "https://files.pythonhosted.org/packages/a1/d3/660d94032f92e54648561c1db1f132f10f2bfd7fbf28f151c07e483dd41e/robotpy_hal-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:4a5e2e996ddfcaa3471743f739985f8599d345e305dd36a4abcff75b1172735a", size = 899233, upload-time = "2025-06-02T03:49:36.558Z" },
-    { url = "https://files.pythonhosted.org/packages/31/ea/7675cce40c6933f4890f113385bf792002b6cf30622f0dc772affc9cc40e/robotpy_hal-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:4767d09364f3b043fbb106f439b52eaa692333645c929d98d6bc887059c18613", size = 895544, upload-time = "2025-06-02T03:49:38.471Z" },
-    { url = "https://files.pythonhosted.org/packages/98/20/8d96b56da25c0139ca3ee15b7b52311e551d63c19af9a18d9862daaac7b0/robotpy_hal-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:ec293b0f122f9493c3880cc1f74479e84cceed535cc939498734067b829dae67", size = 1111171, upload-time = "2025-06-02T03:49:39.799Z" },
-    { url = "https://files.pythonhosted.org/packages/31/16/83a1b3cb97a0553ed7a46663ee2cf288533e0907d2cef4c1bec64e02ea54/robotpy_hal-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:bd2f4dd35c9dedc32044668e5a0140c1696cb656715f50258a9f4de2097fdb92", size = 993912, upload-time = "2025-06-02T03:49:41.13Z" },
-    { url = "https://files.pythonhosted.org/packages/1e/dd/1c022bdf140dcd7f69ff21a5c49161c5753b8e91bf218872d1db439237b5/robotpy_hal-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:ad9f58ca2af958951441714630467df351d535c30a3d992e5cc21a0181330472", size = 589865, upload-time = "2025-06-02T03:49:42.449Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/17/9b6639113a217fcf26bae4caa765d85ecbf8da002deb1d991ac59e148fb8/robotpy_hal-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:0c16673e7fdde7209062cc6eb222aef4592f0607688c6b4891d718f29d3d2748", size = 492052, upload-time = "2026-03-13T02:31:20.413Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/9a/71362728861b189ad658c22e550d632aac3a96718d753828de682a6bf083/robotpy_hal-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:f42ccc4ba051667d79c3c9dce15b10d196283d3350b06b845d974bfa208a02a9", size = 487113, upload-time = "2026-03-13T02:31:21.716Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/e7/b13a12cacb8f918601d376b1ea443ae3286ae29945d9454838dcc4181b28/robotpy_hal-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:c5f6ed1ef09b9082db6586ccb467c25df18b21559a9efe903acc66dcdb74d8f7", size = 542944, upload-time = "2026-03-13T02:31:22.863Z" },
+    { url = "https://files.pythonhosted.org/packages/54/36/1f930585bbaa97d3120cebb27245844767f089725132e79b56e349a98fb1/robotpy_hal-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:b025028c35eef86ade5a13ea29a571403284472dd84e463dd14cd68ed8531933", size = 593007, upload-time = "2026-03-13T02:31:24.169Z" },
+    { url = "https://files.pythonhosted.org/packages/11/42/45ac4d6176772a96f92c749663adab3585c7fd60f584142d0bdea544b3fd/robotpy_hal-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:0f314707f69044896b0eec64b8a658ab018117c5dafe04df6a843536b1782f38", size = 341256, upload-time = "2026-03-13T02:31:25.462Z" },
+    { url = "https://files.pythonhosted.org/packages/80/2d/44952bb9e59682ba8fd20947584a4e47695038bc618e8eb867a84b721bbb/robotpy_hal-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:29014bb5c2de965a30f29939b0179f9df2318bfbe11dd85fb01fae99e9b5ae9b", size = 492253, upload-time = "2026-03-13T02:31:26.913Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/25/d9edd07757abef7b04819c64559ca4a6664b2120489d68b35f782c73f535/robotpy_hal-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:f47695d1e9f319ee8749cfa30c3b6c1c8c0a623ae1cd6107caef6009b5ac5a1d", size = 487307, upload-time = "2026-03-13T02:31:28.42Z" },
+    { url = "https://files.pythonhosted.org/packages/49/74/4e4fa81aaff2e1f0d39b3006e244289548525814e2978e03790d20ec3ead/robotpy_hal-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:8b21cd4fef63a382b46c7f43ae96c40ff39689fd813b5df2a02e086ada508542", size = 544455, upload-time = "2026-03-13T02:31:29.945Z" },
+    { url = "https://files.pythonhosted.org/packages/63/b3/44470d191be6ea4309b18fdc297d9d63d676de6f213cc0469d25e2db99d5/robotpy_hal-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:02629e94a746eb1bec3c5c4b13e9bae7124b85fbca3b8cba2bbbb84bab69de31", size = 592463, upload-time = "2026-03-13T02:31:31.452Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/52/7ca2b7868c8052e5471ae8a37ef0044dabb72c2b2225f304f6e620a200c8/robotpy_hal-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:341449e0cfb366639c02927efec58d6f36bd7849aa6de20025dbf363b27cf826", size = 341308, upload-time = "2026-03-13T02:31:32.639Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/5b/c932e75c5117b2f5cb76948d7a7d8b3e0c6bd92e6515fc437d3a11262a57/robotpy_hal-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:3ca1d06d904b485d354acdf10691f02764205678cf9702dd3c9be39a6a4a3d24", size = 488906, upload-time = "2026-03-13T02:31:33.741Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/22/5ff99fd1235bcfc61775a07fe3c955cb301fefb31db58fde89899301c87e/robotpy_hal-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:8eb7cd6b48bca06b69e34e587706174636ecbaa1a1dc8e066af8c3433dfb0506", size = 487808, upload-time = "2026-03-13T02:31:35.054Z" },
+    { url = "https://files.pythonhosted.org/packages/07/0b/f554fc2cc70c82c595db3d5654db68e27aa5f11776e1a97df14c40523dbb/robotpy_hal-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:4074bb197e6df3707147a9a4b8bbd0ae6ef3e328c269580b50d417cb52cc6060", size = 545566, upload-time = "2026-03-13T02:31:36.298Z" },
+    { url = "https://files.pythonhosted.org/packages/66/29/21f13dd357f2d91cf26beea0af203ec52ebf1116144ef427cbe4fb9a7afd/robotpy_hal-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:4d2d8416794bfc9ed69c4c1a5c92664ead06a117b0947f1ee845a9231216e4f7", size = 593120, upload-time = "2026-03-13T02:31:37.748Z" },
+    { url = "https://files.pythonhosted.org/packages/58/d9/2183f20a00badf4197d89984a8df5b9666142220a3c5b09465369030b9ed/robotpy_hal-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:de338ad8ba9d75abb1724c4112ef63b9cae5ebfcb522f625a2bfa0ca46e3fa0c", size = 349379, upload-time = "2026-03-13T02:31:38.995Z" },
 ]
 
 [[package]]
 name = "robotpy-native-apriltag"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpimath" },
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ff/c2/a66ca0c99f02522f5db7ca493642a37d6f9a67b1a9bb376c09c95e0053b9/robotpy_native_apriltag-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:25e7d38c5e9c42608a77b7ca457ea06fc7c09a1d51a2e242a107b97ed399f1dd", size = 606205, upload-time = "2025-05-21T04:13:06.222Z" },
-    { url = "https://files.pythonhosted.org/packages/ab/88/33575600fb1f2422846ee8b521b6abb5fbe9d343941e838574b2b39b2bf7/robotpy_native_apriltag-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:8ed3e2847dd6e90c0645ee8768ef789f065fc7d24f2708932c6a201d02568bda", size = 312822, upload-time = "2025-05-21T04:13:07.819Z" },
-    { url = "https://files.pythonhosted.org/packages/11/73/fdef36e1c5cac2a49378d56996af2aabdeebc8d0912ea1304452d6dd6e89/robotpy_native_apriltag-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:81f309f723460274ec7cd5fcb37d6e2042b5c369db41390d7d242173b2170aa8", size = 302186, upload-time = "2025-05-21T04:13:09.435Z" },
-    { url = "https://files.pythonhosted.org/packages/41/e4/deab2c2ff7588b171f0f9a705ae1055972444504935c01b5ccd1199afd81/robotpy_native_apriltag-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:2e5f472162fe20079b1052ca08f806f8e0d6bb484e8565889eda2b18c584b5c9", size = 302249, upload-time = "2025-05-21T04:13:10.626Z" },
+    { url = "https://files.pythonhosted.org/packages/0d/24/efb7fb9b14ec66a2ffc2da6e6efa761187fc59db17cc518570e034d24c6c/robotpy_native_apriltag-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:dfb0ff8eeb0cfbf26a703742410712d558889071e6d6460339c3e649dbf46caf", size = 608505, upload-time = "2026-03-13T02:28:16.91Z" },
+    { url = "https://files.pythonhosted.org/packages/b5/07/604518039289e17c9cf1ab626f623b205dc5c5c0d15e90b3c21605a8a81b/robotpy_native_apriltag-2026.2.2-py3-none-manylinux_2_34_aarch64.whl", hash = "sha256:7d93cb20c7f1b27e612c09bdfecf36cbc6ec68b161f2ee35ee60db48720d678d", size = 302706, upload-time = "2026-03-13T02:28:18.299Z" },
+    { url = "https://files.pythonhosted.org/packages/32/4f/5d5bd2f58246c318bb198eca02212e9b9638e029ee1cd9cdd97368f0a523/robotpy_native_apriltag-2026.2.2-py3-none-manylinux_2_34_x86_64.whl", hash = "sha256:7c7aa4c74c393c4595f478b05904a997e2f5d100959899d0b2dc7e1a15ebec07", size = 314722, upload-time = "2026-03-13T02:28:19.804Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/ef/92bba5b3751a71269010481dfe7a45a5a70fe668cea1c3c9f8829df9a9a7/robotpy_native_apriltag-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:b642d3567aa3885affc7bfbdb1aad529cb5958bc7c4fc1504d10c960d140937c", size = 309550, upload-time = "2026-03-13T02:28:21.152Z" },
 ]
 
 [[package]]
 name = "robotpy-native-ntcore"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpinet" },
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/be/f0/1276f729680b08f9b3c42f65ef0f97d605c3b8ebaf48c816af2ac8336f4f/robotpy_native_ntcore-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:2681c7f5c7c2c81785efa06dd6591bf4751540774a269db6ac22b5538a68a0a4", size = 1211173, upload-time = "2025-05-21T04:13:12.177Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/35/5e25542251bb925837d9b2b8055c54c0bde87e0d87128ad31321835b918e/robotpy_native_ntcore-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:4043cbabefa45a6c290a7a86f3d6450ccf97da6579cfc4d5c6551025072c81f0", size = 676760, upload-time = "2025-05-21T04:13:13.635Z" },
-    { url = "https://files.pythonhosted.org/packages/69/3a/8fd2cd7366dfea12ba92f90ac085cf0035be83378786c567efbb7201581f/robotpy_native_ntcore-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:479d3e36b906445d5a39c50674370948dce7281afc48d28f55cc27e5af50aaae", size = 643998, upload-time = "2025-05-21T04:13:15.292Z" },
-    { url = "https://files.pythonhosted.org/packages/7b/d0/f3404c80f6a893b06526425155a9ce45a6e730dcdba7607ad9eb24313149/robotpy_native_ntcore-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:7bf6c2681b85ccec2466fde7f7d558ebd543d0d1fb0736454429bc7c1a17d216", size = 790428, upload-time = "2025-05-21T04:13:16.946Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/05/0ebac70a1640f1ad7c3b82620939802c4b3c1ee953949f1062a5fd4d45d6/robotpy_native_ntcore-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:1700a68856261b1b734cfbc2ecf06d7126c6d06c1a27bcea4fe26b9a13adb4f0", size = 1190053, upload-time = "2026-03-13T02:28:22.679Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/de/f5e164d34cf7b73d730c0f7d74edf0460a30f4d4140677adb70ff2ca1402/robotpy_native_ntcore-2026.2.2-py3-none-manylinux_2_34_aarch64.whl", hash = "sha256:9f7ad344e25ca20cd44d57699d316d83ce690e00f4a8685e4896b0d938cea322", size = 642110, upload-time = "2026-03-13T02:28:24.134Z" },
+    { url = "https://files.pythonhosted.org/packages/b9/7a/94f1b729cfc1ccb176b01b8a8f041d5e8ef6d206cbfce9e20233790ea6a6/robotpy_native_ntcore-2026.2.2-py3-none-manylinux_2_34_x86_64.whl", hash = "sha256:d778333100695248ea52c27776a6be4397855b3202081323da3df141176bbf22", size = 673925, upload-time = "2026-03-13T02:28:25.386Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/16/c37d49bd11f93f811bce58b0bccc9c9caebfe0738860419a970f91485a9b/robotpy_native_ntcore-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:e3e081f396f813b030f44ec3831e7a1672dbd74ab0266264c00a00b22c95bd1f", size = 783830, upload-time = "2026-03-13T02:28:26.574Z" },
 ]
 
 [[package]]
 name = "robotpy-native-wpihal"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/6c/50f8972fe2b06b8130d1d97148847ac9b1859bff4dcbf84f255ec419b3cc/robotpy_native_wpihal-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:324a099e4555525a09569843cdc249344cab9d586c63cd266d112870620240b1", size = 530672, upload-time = "2025-05-21T04:13:23.635Z" },
-    { url = "https://files.pythonhosted.org/packages/23/e1/3099d37f01d1333f40e76678ddcdc129f1a73a68834251abfebbde52ac6e/robotpy_native_wpihal-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:1c8bc41040c902377c2c7521a68ec45d05a5d0f24fd5d42125485d16a7bbd98b", size = 406660, upload-time = "2025-05-21T04:13:25.469Z" },
-    { url = "https://files.pythonhosted.org/packages/d1/02/f038e3f117acc1f8ab65293f872c4bd8babcaeade9e27ad0eb75e023c11a/robotpy_native_wpihal-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:480ded45b21dc8cca99fbeb7a58c7a84fd6f1596cb8987651847a73ca950d855", size = 355818, upload-time = "2025-05-21T04:13:26.764Z" },
-    { url = "https://files.pythonhosted.org/packages/94/76/89be915f3b690567327cc3a5ed3c90f9f2a90d96492d3c9a6ff8b1528599/robotpy_native_wpihal-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:7ca926f8643f1bf07fd35d6db7f70c8688f8bee78be09a3807859d88b1685776", size = 384736, upload-time = "2025-05-21T04:13:28.42Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/73/018d7376dd2e24a2db1117e926430b4023d75b5ee6acfda8820dc6aeff35/robotpy_native_wpihal-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:0bf94d9c9558b658f6d0c33ca1f2a67d40ecbe999e5b26461b58a638a2768804", size = 526206, upload-time = "2026-03-13T02:28:32.39Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/a0/407f757ef9015644a82298c9455582560ba138026ab3f8aee9a263d9487d/robotpy_native_wpihal-2026.2.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:e5710c15667b70879e82b46c108e8fc81e39fbfad08c526e32c179d52993fa33", size = 356794, upload-time = "2026-03-13T02:28:33.614Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/87/b93b596f4cdf2f67d9c2225635dd99689fe78d8aadcce0547b87812ddb77/robotpy_native_wpihal-2026.2.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:ec5f8ae0a03ec66eb6f48e6f531b1d38ac574a1ace8fd7b3e8ad53ba76e854dc", size = 404872, upload-time = "2026-03-13T02:28:34.824Z" },
+    { url = "https://files.pythonhosted.org/packages/47/6e/2a1d37e3b3408484e09f0a8cf5049eb69313b23895283383fa5ee858536f/robotpy_native_wpihal-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:badfc98826c76378d8040cfe7f7776dd63dc85715b9176f38e8e683c68ae9041", size = 386990, upload-time = "2026-03-13T02:28:36.471Z" },
 ]
 
 [[package]]
 name = "robotpy-native-wpilib"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-ntcore" },
@@ -637,57 +651,57 @@ dependencies = [
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6f/87/8efaf8f8997bc8460fb29775b7f4251394776fc9e7db47c8c8b9e1ae0806/robotpy_native_wpilib-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:f38e426a44f59bb783a982d504c0faaaaafaaedf9020f1f7597efa779a861f79", size = 1791046, upload-time = "2025-05-21T04:13:30.157Z" },
-    { url = "https://files.pythonhosted.org/packages/f6/06/1dc7880dff28ad4cd3244a5b9b9e4329b0df611a58ea962c47f555729fa2/robotpy_native_wpilib-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:4488ad239b83c0433ea4b9e836e30a81f22f5778709798c038f0a21f1fbc1e39", size = 941563, upload-time = "2025-05-21T04:13:32.034Z" },
-    { url = "https://files.pythonhosted.org/packages/76/84/c583b9e1b5aeeb0891edc733770291bdd395951d407a624f4b58f07d9fe3/robotpy_native_wpilib-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:3f2a9182b1e5cc27c3a320a508c322bae25d12c6dd91e75b6cbf525fe517cc85", size = 903691, upload-time = "2025-05-21T04:13:33.336Z" },
-    { url = "https://files.pythonhosted.org/packages/e7/36/c86a359ea172ea2b86fe27f43bcbcdddc628e1c82bb39a37f3d1810fa221/robotpy_native_wpilib-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:bfb1e91cce1dbf08fd35943a7dc6c32c5d769bbade68f7fc65fdc79723ea5a32", size = 1220886, upload-time = "2025-05-21T04:13:35.082Z" },
+    { url = "https://files.pythonhosted.org/packages/c9/1d/3337a7b26cc4b2ff193af229d1fa202d5b121b8679d568a32d4efa5b6340/robotpy_native_wpilib-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:9df0948551b166b444957e887864232dee66174f94358eea6d82fd49a5950e8f", size = 1755707, upload-time = "2026-03-13T02:28:37.918Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/91/a59af0b83744a565db83ede48b180f51b713b7b337fdcded415862449a47/robotpy_native_wpilib-2026.2.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:6314e6ef2ab889a34161f142ab73b96271acee13cf3b2d84ce324f10c452292a", size = 893780, upload-time = "2026-03-13T02:28:39.482Z" },
+    { url = "https://files.pythonhosted.org/packages/56/91/218bf977548e381b097f837a5023f1167040fc031b9d07fb8c8080a918b6/robotpy_native_wpilib-2026.2.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:ade11d0aa3c961ecdddcd3c4bfcc95af6d8f3a6efc56326c2493cc059446754a", size = 928708, upload-time = "2026-03-13T02:28:40.687Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/03/ba473e3ca01563d4b9c624b9eadb1d3d61e05d2954d1846153a10a56f261/robotpy_native_wpilib-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:90d5bdab58e190677e725cc6767564c2a5f74af81adc1f01041128810fce911d", size = 1208786, upload-time = "2026-03-13T02:28:41.954Z" },
 ]
 
 [[package]]
 name = "robotpy-native-wpimath"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/9d/e206ee63feb4d2480f7e7ee1a84952e20c51ba590409002ebd62114bb147/robotpy_native_wpimath-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:70b5b907ba4e1bc7f25bab3e3db7d93f976a730ea2cefe8723116b5ca9844b82", size = 3579501, upload-time = "2025-05-21T04:13:36.887Z" },
-    { url = "https://files.pythonhosted.org/packages/55/56/44180e6d0cc8d99676265e55dd32fb73e9aaf9d2f49caee7e6e916b4d232/robotpy_native_wpimath-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:2f628d29978aa33eac492a3fc8b0dfe93082bf6890c869224c34551d726cac33", size = 2470345, upload-time = "2025-05-21T04:13:38.404Z" },
-    { url = "https://files.pythonhosted.org/packages/d2/82/af01c28950e94c16aef25f995578825f9396871b0d474a4ecea2a9ea0314/robotpy_native_wpimath-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:a7938339e86f6bd1837cc43e4b584e2311a9dfb26c4e9f21a6e1ed37348b1762", size = 2398117, upload-time = "2025-05-21T04:13:39.832Z" },
-    { url = "https://files.pythonhosted.org/packages/b7/de/e606c6d5025c12599d68658e647b0342d68bf6a80cdc77ddcde6212f628e/robotpy_native_wpimath-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:5b4f951b1ca6e5201fd66ac5ba9e3e7ae2a2bcbcdfc59ecc9590d8d92c14ce9b", size = 2560748, upload-time = "2025-05-21T04:13:41.281Z" },
+    { url = "https://files.pythonhosted.org/packages/37/a1/51f5c82a1493804331d3750d8c7f8a4bc9d5f31adbce2097277accd0184b/robotpy_native_wpimath-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:42b86a3e3c2506054648c489baff058e13360682c4d88e502b98d6e736ef3316", size = 3744900, upload-time = "2026-03-13T02:28:43.208Z" },
+    { url = "https://files.pythonhosted.org/packages/68/3f/1c91feac16b815cccb954fd45638ce373297d449f316771e743e20d4fbb0/robotpy_native_wpimath-2026.2.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:b5514d28ad519651a29df705b8d6154361460fe1226811b153c2dd95b394cd1d", size = 2510368, upload-time = "2026-03-13T02:28:44.849Z" },
+    { url = "https://files.pythonhosted.org/packages/54/aa/8b83895a191a1fd778b9357c147848b226d0828cf66a053beff1183d4c69/robotpy_native_wpimath-2026.2.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:9b938312c428419fff512ff5b8680ae5bd436ecae60d45f8d5ae3c1d0999f4d2", size = 2583389, upload-time = "2026-03-13T02:28:46.252Z" },
+    { url = "https://files.pythonhosted.org/packages/9c/84/165177b4030c16ae0a9f6f12c20972dae5736f0f5575ffb357e462f03631/robotpy_native_wpimath-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:92f2f1a5edc532a3b9ecdef121cdfb3081e11419be7374c59bd1c7198c99e160", size = 2661129, upload-time = "2026-03-13T02:28:48.047Z" },
 ]
 
 [[package]]
 name = "robotpy-native-wpinet"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/9d/dfbc01aab21d738be7cd29c110fa384a991933d13944ef5780429ca34106/robotpy_native_wpinet-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:cc6d5318294b15bc23285fed5efe4788c9e2abc3f7cc7d6eb4293f1de5ea2adb", size = 1221965, upload-time = "2025-05-21T04:13:42.703Z" },
-    { url = "https://files.pythonhosted.org/packages/cb/b2/e2b5ce5a8fb79355092160fcb5a4082b31cc015593bc1fb448469f2efe4b/robotpy_native_wpinet-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:67f17828e9f1ff68ac05d37465f4d386d9ea9d4d17e09b2259c8e97eb05c1ac1", size = 680398, upload-time = "2025-05-21T04:13:44.116Z" },
-    { url = "https://files.pythonhosted.org/packages/a9/47/987e361bb82de037ccda880f36d82f985fa46fe581206b7614109fbf4737/robotpy_native_wpinet-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:3057a65478da66e2b597f22f859135b3b2bbafb17ad3f927d84a31edec46a154", size = 650753, upload-time = "2025-05-21T04:13:45.456Z" },
-    { url = "https://files.pythonhosted.org/packages/2b/36/cd44b1b6236d25b943c40356e13c4b5a7913e25ce93a1923e8eae0693592/robotpy_native_wpinet-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:cce18b5b064da021d4657b8a62903bf3826722588a59d4ef3fb8aa65110fcce0", size = 780603, upload-time = "2025-05-21T04:13:46.993Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/4b/d3aa494725aa821c23dd68799e0758683a98729d0a30a376984d756b0c5d/robotpy_native_wpinet-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:eb88b226e4e4af6ee13aa4ffbe4c5a8b472899b085a7369e86d2eef16d7f60e1", size = 1221399, upload-time = "2026-03-13T02:28:49.442Z" },
+    { url = "https://files.pythonhosted.org/packages/81/9f/09fbf418f25c3e41daa64ae7e72ce0e75c7dadbfadbf2b87a13ef8f5561b/robotpy_native_wpinet-2026.2.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:592e3625a986a333c97bbdb3cdf7d9412b858dce1377d3255c724b2d04dac0d8", size = 650326, upload-time = "2026-03-13T02:28:50.775Z" },
+    { url = "https://files.pythonhosted.org/packages/51/83/e06baa7737569810e06b3f313ccd040951cbda4148940ad19d72a9b778f8/robotpy_native_wpinet-2026.2.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:dec0c3dc6238216d1c2d68caf0cc607e32256b3fd7953f68efc59cb1edc64dea", size = 679403, upload-time = "2026-03-13T02:28:52.005Z" },
+    { url = "https://files.pythonhosted.org/packages/25/9a/0b983739478b02038c4577c7a2c44c2c3947d5dde8d0f8f87740be5a790b/robotpy_native_wpinet-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:b3580bb96e9c7e1f1c73106fe130140747537a024ca6135c3da22eb37f2ba9c2", size = 780487, upload-time = "2026-03-13T02:28:53.141Z" },
 ]
 
 [[package]]
 name = "robotpy-native-wpiutil"
-version = "2025.3.2"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "msvc-runtime", marker = "sys_platform == 'win32'" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/95/789ae7f9994836f410bccfd4cc199b38ac17fc668726c857fea4fc8ae76e/robotpy_native_wpiutil-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:871cd5c62664620309e38f610551bce551aa8e7c607d500d51eda15e81340dea", size = 4129698, upload-time = "2025-05-21T04:13:50.351Z" },
-    { url = "https://files.pythonhosted.org/packages/10/d1/ed55040290ad7b2834fed44855e1718840dddd4a5d0c86420802ec1243d9/robotpy_native_wpiutil-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:0794d841d4c1c87bc63d46544ce097f07dfee6da8d1266047644a36cd47eabf7", size = 2876853, upload-time = "2025-05-21T04:13:53.329Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/bc/4a8658d7715723ff84f7724f69d8c83d3679b77ce9772c2bc0302ae2eb4d/robotpy_native_wpiutil-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:3cc7e9e687b6a14d5371591f04edcf7e2e98cd093b358e70d0d51fcf8fd6a3aa", size = 2766902, upload-time = "2025-05-21T04:13:54.845Z" },
-    { url = "https://files.pythonhosted.org/packages/8b/ed/3b2ed5e44dc166d376af5aca6b6a78c066cde54829e5d1b10e20634a419c/robotpy_native_wpiutil-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:577a050c3b5e210d2cc32881c4f1f92213fd4c74f02fa6fb8e9f8cc8f08b9f12", size = 3208633, upload-time = "2025-05-21T04:13:56.433Z" },
+    { url = "https://files.pythonhosted.org/packages/37/c3/8518d0d32d25e4c1332d11487537b8f33a12dbe7b7e02775806e2d837492/robotpy_native_wpiutil-2026.2.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:b55cb828d593ae7cc7ceee2fe6865461eaf103c17bbb3460fd698dd24fb9f8b8", size = 3921028, upload-time = "2026-03-13T02:28:54.739Z" },
+    { url = "https://files.pythonhosted.org/packages/51/bb/2147e373098de3a8996db9852d70a1708dd6208a591d926b989f1bbcc4bc/robotpy_native_wpiutil-2026.2.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:2478c76d0bb257be9dc8fc573d101e4aac67de7e4919b354de5359e6176854a8", size = 2598548, upload-time = "2026-03-13T02:28:56.239Z" },
+    { url = "https://files.pythonhosted.org/packages/45/8c/13852e5af1b53e16a25d82d26544455eb6e826f8661c497244434f14076f/robotpy_native_wpiutil-2026.2.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:344462c441bbee86cd98062d8de99c1ae6259fc949b6dcec6c8cbfdfc48075ff", size = 2703538, upload-time = "2026-03-13T02:28:57.684Z" },
+    { url = "https://files.pythonhosted.org/packages/50/60/5c3aa5772a2374a14884feab36e6a81443ea406801e3a2c15dbc59fdefd1/robotpy_native_wpiutil-2026.2.2-py3-none-win_amd64.whl", hash = "sha256:22250743e9c11f1381a57ef3e7eefa835073a164853805072dc54991527304d2", size = 3006586, upload-time = "2026-03-13T02:28:59.043Z" },
 ]
 
 [[package]]
 name = "robotpy-pathplannerlib"
-version = "2025.2.7"
+version = "2026.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
@@ -697,71 +711,86 @@ dependencies = [
     { name = "robotpy-wpimath" },
     { name = "robotpy-wpiutil" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/11/ccbada86e52e5f7eed7157419e06e61453cdac737d88a3d4b2c82f5f3210/robotpy_pathplannerlib-2025.2.7.tar.gz", hash = "sha256:f6d8e09635aabde59b1e7091bc87630eb8be7923b48a9431a5c181d0a3947cd1", size = 48070, upload-time = "2025-04-13T20:41:33.364Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e8/2d/0266f868749cb7e29861056c13d0178ed3a1b54468f1e64758288d784c3f/robotpy_pathplannerlib-2026.1.2.tar.gz", hash = "sha256:d169e3f2af7095d0aa52c23d0888b54e490505f79fcf8ce0fe0296cb14655c83", size = 48070, upload-time = "2026-01-25T05:21:24.172Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2f/d7/b1f7dc6e72ec1c8d78c672b6706d2ba047fb05fea0f4cbf59c14da63295e/robotpy_pathplannerlib-2025.2.7-py3-none-any.whl", hash = "sha256:a1f5ab93a87301b85813bc8cfe3d4f4ad80e540d45248fa6e6edfe77a34e9f74", size = 53869, upload-time = "2025-04-13T20:41:31.618Z" },
+    { url = "https://files.pythonhosted.org/packages/d7/ff/7cd65921c88a7b201c3e9ac7d01c9c3f78ef60b8ab1df493f1ed90d67ff9/robotpy_pathplannerlib-2026.1.2-py3-none-any.whl", hash = "sha256:3b64761432f658474c42de3967dcf0bc5114dc516694b641c6369cc4cd2f7437", size = 53850, upload-time = "2026-01-25T05:21:22.714Z" },
 ]
 
 [[package]]
 name = "robotpy-wpimath"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpimath" },
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/55/3fad2ac8135af98814a6ce8c809b6c3cbba969a77b8772b2a391894d807c/robotpy_wpimath-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:96ac2047417b50a524c5e8114e1dd7aad1393b94bc3dfe1c5f260f7b3cdb03d5", size = 3216265, upload-time = "2025-06-02T03:51:31.427Z" },
-    { url = "https://files.pythonhosted.org/packages/2c/25/b6f36e2a8e5197b9da8a939cdde685eb426d285e3fc7c9801bf9a34d11a4/robotpy_wpimath-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:cb21be78476cdd7982b2e80c67f9896b6ba37bab6b8ca370472137f93308cfef", size = 3302602, upload-time = "2025-06-02T03:51:32.846Z" },
-    { url = "https://files.pythonhosted.org/packages/33/48/1a61c704f5028dfcca0a361f921eaee6581409f52c398de6bc88758cd95e/robotpy_wpimath-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:cee7fcfd96869b218a8d15cbf7e968ce5da406afe6b32e0d6484f56a7f34cc1d", size = 4945094, upload-time = "2025-06-02T03:51:34.342Z" },
-    { url = "https://files.pythonhosted.org/packages/01/5b/dba0c83f917f8a4eb8cf00962411234ab57557d77975fe16e4dc7f79f5a9/robotpy_wpimath-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:a0af22346f117960d764c3467de38e0412c58fcda4d731fa12dc870a191f2160", size = 4447411, upload-time = "2025-06-02T03:51:35.852Z" },
-    { url = "https://files.pythonhosted.org/packages/05/e4/b78908cffa19d3359c5c7494bc3c767abb0e8ceea2dc5d1423732de25301/robotpy_wpimath-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:4ebae78ed9da14d173afbbaceccc7baab5e0b75e1113d1ad93f066255aa37e1f", size = 2278859, upload-time = "2025-06-02T03:51:37.806Z" },
-    { url = "https://files.pythonhosted.org/packages/6e/c6/0d4d00ab73c1a60b5ffad66faba1b450c128b842b9c0b1ad7b46e15e4b85/robotpy_wpimath-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:a4b1e8ed171c14291f8d565aea426bfbc52fd3b8442b4f4ea80b577a1cf99127", size = 3216650, upload-time = "2025-06-02T03:51:39.552Z" },
-    { url = "https://files.pythonhosted.org/packages/de/d4/9e03cac5fc9021565f9197d33bc7e9e3ade2f60b4106bfdc02c243ccdc83/robotpy_wpimath-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:78fceb1225942c68dd26e5fc4fbf92559267b4c624e5135df25e35f362d9748a", size = 3302659, upload-time = "2025-06-02T03:51:40.979Z" },
-    { url = "https://files.pythonhosted.org/packages/ed/1a/479cbb07ad14ac8c38878f9c6e49c4b4ea7e308dc5e0428f5f50b5915db1/robotpy_wpimath-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:d2d801f469acdec224e94e9d0c56e9a66afee01bfb1e102440780157452101d1", size = 4942859, upload-time = "2025-06-02T03:51:42.454Z" },
-    { url = "https://files.pythonhosted.org/packages/d3/3d/3204d1a0939fc6c1fdb6cf5040be533b71cbae1823a87c5b588fc18dc891/robotpy_wpimath-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:1d88f6b6c99bd5bc860bd619f49ebf689a18940b127adcd5818feb6108486aab", size = 4452100, upload-time = "2025-06-02T03:51:43.974Z" },
-    { url = "https://files.pythonhosted.org/packages/ac/c5/342e781b9eecf88452b773a48cf69f80d60821251851d28b061e395ba3da/robotpy_wpimath-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:ec42506ebfdac2e84a913da5388f70b7745962f7939283e2cb86ffcf8fb8a508", size = 2278980, upload-time = "2025-06-02T03:51:45.407Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/d3/0b63ab50f3b6e762cc71ea015f2ec5506ac7d9dfb23777e6c1821ec58327/robotpy_wpimath-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:6814c36acb840c55b8e48f286a23628e43adc4a164a2208f2fa0c3d765c2af8b", size = 3519641, upload-time = "2026-03-13T02:33:22.112Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/0b/beca5a718968bc131afb685bbcda706aa733367e5c9000c09c95dda295c4/robotpy_wpimath-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:174daf30936f518db05401bf1c57fb3b815aa029fa498bf3f98d951704e2033b", size = 3623622, upload-time = "2026-03-13T02:33:23.69Z" },
+    { url = "https://files.pythonhosted.org/packages/42/d8/bd4a495f2f4aaea02fd949d20fecacd42e64265fbca6b181d3c7ff33b567/robotpy_wpimath-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:7e12883bad10ba63c7d090c77c51ff86e7af92fdd693c0ff08a6f0a88b122b64", size = 4798805, upload-time = "2026-03-13T02:33:25.086Z" },
+    { url = "https://files.pythonhosted.org/packages/08/3f/224d11845de7c220f78974ff626677714c2b0364ee479f9082439bcc324b/robotpy_wpimath-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:fbcb7a46d5ea28f2c4e947d9546406fc3829d91bf80a77eb251f7ab32d76c437", size = 5408178, upload-time = "2026-03-13T02:33:26.629Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/8f/c63f76281e32e441583443bc800f30cafb54f08ec79e5261f264e7cfcd15/robotpy_wpimath-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:a0f630244e713ef6aeb22ba8b6d0f814d54d5dd8dd2dc9b5f37273ed4dc6e39a", size = 2320301, upload-time = "2026-03-13T02:33:28.178Z" },
+    { url = "https://files.pythonhosted.org/packages/7d/c9/e5aea21c94213f437164e9a41dc8d6cd10fe978eab418d553165c885e809/robotpy_wpimath-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:f74d97a7e5c7dbde815273e71eb338e6adcd286993a0f29f6c81541329779590", size = 3520128, upload-time = "2026-03-13T02:33:29.504Z" },
+    { url = "https://files.pythonhosted.org/packages/14/24/2dd44c7a156a03e8e9b2ec7e08e29cbba308770f381493ae3213355a4c4c/robotpy_wpimath-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:ebbe331cca7f87bb003796291550c63ccc647e53d0e96a7e5c173f5014d1be31", size = 3623558, upload-time = "2026-03-13T02:33:30.874Z" },
+    { url = "https://files.pythonhosted.org/packages/87/63/56859fb775a18558b567a5e5994047dcb37196fd3955dc81bc56a717b89e/robotpy_wpimath-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:838dd1d3241da1a338a226b4bc066925c2ddc999b0d86a735ef00994a85efe3c", size = 4790163, upload-time = "2026-03-13T02:33:32.549Z" },
+    { url = "https://files.pythonhosted.org/packages/de/02/b16dd8c15a82e86b480ceb8f7d02f7547c7555cab7ddef45351ceec409e4/robotpy_wpimath-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:35a023b1db6c18bed00ce995564e3311eec099440d8c54b81fff4c92dcad3b6b", size = 5408104, upload-time = "2026-03-13T02:33:34.013Z" },
+    { url = "https://files.pythonhosted.org/packages/73/69/6d1cef9f351b391eacb6b78e4ccf33292cc75a84ebe629b3c00bfaf7c281/robotpy_wpimath-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:b376ed40f7b6142f36ad4bd0b1b2b98e3194ac11aec634e38a2fb4a319b43612", size = 2320316, upload-time = "2026-03-13T02:33:35.439Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/44/e5d3faeecfc2a7b5fa68c2ddf0c5a3fc29bdf3a7064964199cd109ca0446/robotpy_wpimath-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:d7ffb557134561ada2ba3cb6db5b925ddfe02f85d1c1fa7cf61fed13ae3d93f5", size = 3504218, upload-time = "2026-03-13T02:33:37.052Z" },
+    { url = "https://files.pythonhosted.org/packages/91/bc/2ea1307779650eb1f72cd2ba329a5581498a855e896bb0d56da02e9c8335/robotpy_wpimath-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:863c504214d1eb2fb19175343324c8bf9e300338a1f0392d3ed216ac9b2b4666", size = 3621846, upload-time = "2026-03-13T02:33:38.529Z" },
+    { url = "https://files.pythonhosted.org/packages/53/44/859477e66fecffea66833fd0194b674e552c61d64cf77a2533884e02bace/robotpy_wpimath-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:dd74a04b825c11728fe9812cf1bdc9330e35da8706b9cb2d8e473cc3171f3181", size = 4804270, upload-time = "2026-03-13T02:33:40.15Z" },
+    { url = "https://files.pythonhosted.org/packages/a2/72/41e8088aee14e88683b2d05ce5ad700b16a7987315513ddebe0e7c085e73/robotpy_wpimath-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:971b15e7ad7318df49234000f152037c51775676e8f532ec3e8815773d9fa3a9", size = 5413048, upload-time = "2026-03-13T02:33:41.612Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/71/bdc8b4b74012a77ba13c43ad972c9aa1970abe14b8225ef938b3eb05cb47/robotpy_wpimath-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:c13be0eaf21e9261ecb15367ba44c3d5920b7fea14c6b743bd384c741fc2f211", size = 2378858, upload-time = "2026-03-13T02:33:43.001Z" },
 ]
 
 [[package]]
 name = "robotpy-wpinet"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpinet" },
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/9e/b5114ad43446ae12d70f3666efed0f69604d99fb23bd226dbb4f52a8ad40/robotpy_wpinet-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:12598d5d02a7f192105d78e1d311494ce4fd45d38462990266e4e1e9d56c5fb0", size = 86613, upload-time = "2025-06-02T03:52:03.885Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/d1/0fd2df343fbf7bf328cacf753641fc1a641f645a6195b27cafa5a4d7c7f3/robotpy_wpinet-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:5e17d80ece2bf91e01c70806512d367aa4f692227f09a4f55e05d2cfd978e823", size = 92063, upload-time = "2025-06-02T03:52:05.059Z" },
-    { url = "https://files.pythonhosted.org/packages/16/8a/0633214b01960c13e4bf299a93203b74702baee19a9d2358a369902a47cf/robotpy_wpinet-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:5c991aabab5fd500e30892c74a00acd45f400f9cc7e36da8554390377c8bcf14", size = 102490, upload-time = "2025-06-02T03:52:06.791Z" },
-    { url = "https://files.pythonhosted.org/packages/e5/04/f8385e1815f1d60f7d90eef2f994694be62a89ce967d9993b62f3df6116e/robotpy_wpinet-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:4229009f2e20a6622915d9afc602304142462d3996835799c33c07755406e4df", size = 98102, upload-time = "2025-06-02T03:52:08.349Z" },
-    { url = "https://files.pythonhosted.org/packages/d5/80/db99370e08e5fc7a64a4e3e1dd1502c07c3adadb951cd25c473c512a2986/robotpy_wpinet-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:680f95786da8fe3bda19c2ba2406d0e6a9cfb43a44f6f15cf28f6289e3a1a6b9", size = 81038, upload-time = "2025-06-02T03:52:09.453Z" },
-    { url = "https://files.pythonhosted.org/packages/80/00/ff1cfb0c2f19ea166754fe23a2143e44cdad0e0073b987ead62b3d3e08af/robotpy_wpinet-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:350ae1be5233641ae53474d8239ef04ab25728618f58ad25ac2ad8b8daf165a5", size = 86720, upload-time = "2025-06-02T03:52:11.022Z" },
-    { url = "https://files.pythonhosted.org/packages/d4/73/5ebd76d8771911bf5d4bb8a5f5503a9b29ba2e22a9e122d3cc6c6494f636/robotpy_wpinet-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:e6d1d5c76624c9425497dba4a103583acb2492ac69b2a91e9138772a479366ff", size = 92125, upload-time = "2025-06-02T03:52:12.511Z" },
-    { url = "https://files.pythonhosted.org/packages/5a/47/e855ab7c972d97e959c8c5ea2365a1dcfc054d87cd8224a7bf2e9b2ac660/robotpy_wpinet-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:e3cb029e464d6cf100dd9a558243de45e4a7247dd4f481e65c1996c1e8ebf3a3", size = 102813, upload-time = "2025-06-02T03:52:13.981Z" },
-    { url = "https://files.pythonhosted.org/packages/f9/c3/9d3fa5cd39cb5ffd1932be251a59d2bb110868df5623511574a2cee1551c/robotpy_wpinet-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:3ba2d2631c7e15817664c3b5a75b15fdb6ce97be2549dbe64a1d2156ba0d4c1f", size = 98668, upload-time = "2025-06-02T03:52:15.524Z" },
-    { url = "https://files.pythonhosted.org/packages/08/16/ff7f4abca10a290b185755350ba5aed44475c53ca6f16e36946b045c2d5b/robotpy_wpinet-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:226a10d4e7ec3831d98bb2db3eb5d49563baa888da6a79e2a5002ea71bb6f0a7", size = 81040, upload-time = "2025-06-02T03:52:16.588Z" },
+    { url = "https://files.pythonhosted.org/packages/12/ce/7bdd43ff7b5af723e4bc0925aacd43e067a08b4ee0c7ec9855168d3b1f0f/robotpy_wpinet-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:6f897b83dd87b9b1ea79077a266ee71015bac3cbb7a9cbdccc62cb6d66989ce4", size = 97796, upload-time = "2026-03-13T02:33:55.873Z" },
+    { url = "https://files.pythonhosted.org/packages/57/c9/3118ed7fe1fd4a54c18ca6594a7650b0491fef3bc3537aba74c81941d540/robotpy_wpinet-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:4d66123f4bc3ac98eae11c5838d931e12f8f65fca97196f84688a501d404cb20", size = 100436, upload-time = "2026-03-13T02:33:56.866Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/62/cc36803bbee41f86b0da883839b29add7c8f24c49d841ba55230319585b7/robotpy_wpinet-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:b12085eec679372e819f52469ccf11d0a3e0076185d330cce803946a5e3fa599", size = 112724, upload-time = "2026-03-13T02:33:58.101Z" },
+    { url = "https://files.pythonhosted.org/packages/3e/ad/cbdc662d63c387472dcf733738827a54c4a8c30df15499c9254b928e452f/robotpy_wpinet-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:ab6a4c3603b9e7f730ce0ef01331b7b66fd9a8d5ef2350ef529987b7fd67b347", size = 118325, upload-time = "2026-03-13T02:33:59.378Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/c5/ba874b343370f2dc3c13927e2c4afdc0bc1d2971200f3d4e1a81f815f186/robotpy_wpinet-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:6823a5160293eaf64851663a55fb03350b06afde57668d5ac345e5444e5fe44d", size = 88581, upload-time = "2026-03-13T02:34:00.427Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/30/886cfeaa82f5cfa92de4cb81e45a9b1649d7e420408b7a9d2bf74085da95/robotpy_wpinet-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:8d004caf1af0c6c062f7b6c95a9849c46ae97cb2bec48ee793dff4d11b0f6f72", size = 97811, upload-time = "2026-03-13T02:34:01.682Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/19/358997f162b8ada1baad5346c632706cab5db0b008523b5bf88b4bcd813c/robotpy_wpinet-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:a885ff213365bf9dc5163b29e770fbdb10897365f0000de982f36a05d1a44519", size = 100512, upload-time = "2026-03-13T02:34:02.697Z" },
+    { url = "https://files.pythonhosted.org/packages/71/a9/ba2fcd7e7caff768705af7d529a4e453686979db4a63f6397427d92d87be/robotpy_wpinet-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:7846624b9ac219796fa623dd2bc98fe2a32bcd0bab26e8e8ab9822d990da3f0c", size = 112517, upload-time = "2026-03-13T02:34:03.731Z" },
+    { url = "https://files.pythonhosted.org/packages/00/6e/47a70875a5093bd4ef21358f231227d6d6f2bab8eadcede3e2b2ceee6c9a/robotpy_wpinet-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:de65137336e108f18ae84ad28d3d73f0b100ea55618c96ea886fdabb3f0d9b1e", size = 118319, upload-time = "2026-03-13T02:34:04.781Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/aa/9d84b59ef88ad5a1001cf3a28dcfe368488f827f7d726a093939bee726b2/robotpy_wpinet-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:9cd3f95a5ec613f8d615ab57d990f99012bc38dd8c710c1a3bcdec0882e616e8", size = 88614, upload-time = "2026-03-13T02:34:05.82Z" },
+    { url = "https://files.pythonhosted.org/packages/01/82/c844d8ce43df54f2ea48b494a02fca840f9065f05ecff6fb376214d7aa12/robotpy_wpinet-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:c6e819c3071d15e94da040d1d0b1a721dd50ac13dc711d6658fd33a318d3a30c", size = 97700, upload-time = "2026-03-13T02:34:06.81Z" },
+    { url = "https://files.pythonhosted.org/packages/54/4b/0dc0a40b33eb2c5b17f52472a4437ea0b09e8ca1b0b719cafd9c686d29c6/robotpy_wpinet-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:f760f50735d2a5265fa6863dcc37d3231e6c772d15197b414cb925ab1dcf8b03", size = 100583, upload-time = "2026-03-13T02:34:07.795Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/18/2ccac66babe4ab8263009e256b65a1861ddbd672aee669d5676926920f3a/robotpy_wpinet-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:e4a60bc50927e3071e3eb08c414a56dcfe48537636b027838d5dc2baa60e22b3", size = 113183, upload-time = "2026-03-13T02:34:10.241Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/94/819448827c653f5dd92705147a680eb0a350b8d3cac45720b8c8fac9857b/robotpy_wpinet-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:aaca8eb0dca3074d69d40e58f511af106ed9c05abe28ba36213ce519bed0e93c", size = 118337, upload-time = "2026-03-13T02:34:11.311Z" },
+    { url = "https://files.pythonhosted.org/packages/27/fd/2a7304960ccc2b8c3c3e0b2085550adae83ecb29b4a93544bcf250c522ab/robotpy_wpinet-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:3c87a1d7d940bd5737909cbdc4b8869dc80f2d1ecd923a25167c84e5916776c2", size = 90685, upload-time = "2026-03-13T02:34:12.705Z" },
 ]
 
 [[package]]
 name = "robotpy-wpiutil"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-native-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/ba/17b5d8895a9f7ef86436840afa8b32dfcc00e6ee0f631dd315e87850f8a2/robotpy_wpiutil-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:29a629a4fd5f19cda31361672ae41a71a4798b2626960abfc8d8d6e001b1dabc", size = 573659, upload-time = "2025-06-02T03:52:34.981Z" },
-    { url = "https://files.pythonhosted.org/packages/03/d7/ea9e081dd8ac3f4d106f0054134a166300ad6ac1d9a037aa7b298bbbdd59/robotpy_wpiutil-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:60e190a9ea5ec4bd8a91ac79109f4b6cace6e39b601eca5c5d0d3f2a28c9aaf6", size = 587445, upload-time = "2025-06-02T03:52:36.705Z" },
-    { url = "https://files.pythonhosted.org/packages/e9/29/bdebf0e0edca8177dc7a746306d97426c79ede15ec66bcf75ecbef7ffa37/robotpy_wpiutil-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:bef80d80c1e7b7eccabe466aa1f7f4ee692db4e8b27c8977349f922033a6eb18", size = 627503, upload-time = "2025-06-02T03:52:38.409Z" },
-    { url = "https://files.pythonhosted.org/packages/35/e3/6265e53dec42514dc4e62be3312cf73c945f2a19e3c40e37fd04aa14a931/robotpy_wpiutil-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:141b82604742f8bbeb35fa855b8834c980e12e9e77fab3f3e13503847c3e8db7", size = 583782, upload-time = "2025-06-02T03:52:40.094Z" },
-    { url = "https://files.pythonhosted.org/packages/c9/ab/c46e3d4a7391114831c539f378ad64c0df53176806ebc5c29a0380b55dbe/robotpy_wpiutil-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:57d5873dd85ebd0fc12289dfe1888a344d0ccb4fd17972b0eb892b6dad2ac80b", size = 355009, upload-time = "2025-06-02T03:52:41.351Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/1f/e62b8e2aff15fb4b0951a114bafeab8380d03b6fac66d61080525ad0d8e5/robotpy_wpiutil-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:6d8a9fe4c8a5547fe752c6190e3b2be2e048d981800d0dca6c6c90c0c9393dd1", size = 573460, upload-time = "2025-06-02T03:52:42.635Z" },
-    { url = "https://files.pythonhosted.org/packages/d4/2e/445e2d658f53c90337707be651ef6ad16361f687214e22ee5061961d8bef/robotpy_wpiutil-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:8c5cb803248c3fac6d2d2aabfb0b8a9f10dc062ab6c0ad9abb79d6dda4e8c087", size = 587251, upload-time = "2025-06-02T03:52:43.897Z" },
-    { url = "https://files.pythonhosted.org/packages/db/0a/f3673da10f9be55168197ddda33331c2f549cb7d8a521006f13ceb69918a/robotpy_wpiutil-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:53cec827859a2818590ac994982ccfbbd61c222606e93a9aae4451db55726cd7", size = 626210, upload-time = "2025-06-02T03:52:45.182Z" },
-    { url = "https://files.pythonhosted.org/packages/88/ba/de130471fb7b456fc454d987f26b766a1e5adb38aaa86b57279e9a8c9679/robotpy_wpiutil-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:0d8ae7fec010b468aff6f1271230ba6834c7ba120b655a3ce640d9e012408740", size = 581019, upload-time = "2025-06-02T03:52:46.425Z" },
-    { url = "https://files.pythonhosted.org/packages/9f/85/f3eae4835279c0da654d93995ceb3ed44518eff3aa4914528d57a4892625/robotpy_wpiutil-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:bd5bf8958634c488e4e2e48c2e36d6d6f2fd7f77709448c2b87769d0b1e06583", size = 354993, upload-time = "2025-06-02T03:52:47.723Z" },
+    { url = "https://files.pythonhosted.org/packages/48/82/47c18c9690393c6f95aef94593de7dc978faae61815c2eea8aad27539f61/robotpy_wpiutil-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:4f19f37e0f5a8a6be626057572b9595fb7e70918b7b4247eb96c5cc331b638ae", size = 589727, upload-time = "2026-03-13T02:34:26.099Z" },
+    { url = "https://files.pythonhosted.org/packages/db/da/bd3712893017fa3c1d255126e0ca8e04b3094f3227bd445cdaddf67a81af/robotpy_wpiutil-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:c763113c777029dc18f0f530405fc47f6381c46d20f77d259190618fdddd6ddc", size = 590075, upload-time = "2026-03-13T02:34:27.301Z" },
+    { url = "https://files.pythonhosted.org/packages/96/85/9c1b11236b2053ca32eef23a1c0148887f8300c7a3836f58df6d3e812f7f/robotpy_wpiutil-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:35ae3a5e229b6741c3a5d7fc85c466b030014b353e6130697c3d1105f3679328", size = 604916, upload-time = "2026-03-13T02:34:28.513Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/d4/f1a16c16deaba6edc20f59d6d2ae470d86aa29d4c65adfda97c3582f6cfd/robotpy_wpiutil-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:79de39e69a579e4a532fd763f7241db5ad854759fa776914f9e39707679dec3d", size = 671921, upload-time = "2026-03-13T02:34:30.048Z" },
+    { url = "https://files.pythonhosted.org/packages/62/a4/0261726d73f92c4902085d9e79c50ada9972c66477b4ab6a049605789803/robotpy_wpiutil-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:f28e593e03d2f594002a126329a2b59b49f55b7f8d2a457aa6ed800a22e5acac", size = 348474, upload-time = "2026-03-13T02:34:31.256Z" },
+    { url = "https://files.pythonhosted.org/packages/0b/3d/2a444b90f8e677a99ff41f4ef52706173ce46c3fa6154f6258953a4a2485/robotpy_wpiutil-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:b8b4da121bef1d0212c54b2967b8d118d009b04c4e94db50f5d1408237e0bc74", size = 589779, upload-time = "2026-03-13T02:34:32.607Z" },
+    { url = "https://files.pythonhosted.org/packages/64/e0/cf0e5c85c2cbe75843a7a8a311f83236603890cadd9d7d3c997a392b166b/robotpy_wpiutil-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:70116005a1279a49ab2e60e34f3e257691af7cfff5b3c03b34bc03329b27e740", size = 590327, upload-time = "2026-03-13T02:34:33.968Z" },
+    { url = "https://files.pythonhosted.org/packages/28/af/7c466ba1b188e27cc5d0339afc0d26d1a2f99d3b8a97f6cd9fa8f58ce430/robotpy_wpiutil-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:22503f5dc13a39ba42904629bfe3db74395b8ff39f29ff2c40c4f8b98c3e6407", size = 605172, upload-time = "2026-03-13T02:34:35.232Z" },
+    { url = "https://files.pythonhosted.org/packages/21/14/5a2f6144e1829d4bd1713c9f455c0cd97c995a563fa2515d9899f7605ad3/robotpy_wpiutil-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:5c5a2fb628fef57d79c1cb0a72639a6fcc68ab7ba5bc6aca13aaf440ef618286", size = 671458, upload-time = "2026-03-13T02:34:36.771Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/b3/3e8d036c1a000ff91947afeb8eac35d3f45c6923b62e134d0b27e24d27dd/robotpy_wpiutil-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:217ae7b135afc10b44722359aa74d6fe37709bb4aeb541742fc31a4d14df4705", size = 348483, upload-time = "2026-03-13T02:34:38.026Z" },
+    { url = "https://files.pythonhosted.org/packages/a9/d0/4fb65bc8de9b83d656bbba2bb8b4fe8cb05df467a4ac6b9257ee795a99ad/robotpy_wpiutil-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:ae0acd43cdbf2309af0a98c0e8d180a2e9bfce691605a2fbb3a75b0a2633b803", size = 584096, upload-time = "2026-03-13T02:34:39.189Z" },
+    { url = "https://files.pythonhosted.org/packages/bc/44/13f59667a783fad30c2bfb0c580d4991576aa24b9c77d18908f988314b39/robotpy_wpiutil-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:55aa86c9a1b6df28cfc965d2fe99bca49624257f4c3f0c7b3be74b54c2a6897b", size = 589690, upload-time = "2026-03-13T02:34:40.35Z" },
+    { url = "https://files.pythonhosted.org/packages/74/59/890e15fddee5d0b870ac833f72f4aa3b1482cc3d7a366ba69e902fa82467/robotpy_wpiutil-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:4cc6fdebe4a9abfe39de3bc7e666cc78dba79020c7276f73d41ee714e81efc58", size = 606703, upload-time = "2026-03-13T02:34:41.534Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/8a/85dfeb209250ae209dca688bacfd88e3ffdae67505191131d3a8f92aeede/robotpy_wpiutil-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:a428b6eb56d211aa1f7612a6324e538ced5ead5fa960b16ea63cd17723e3e2d9", size = 671868, upload-time = "2026-03-13T02:34:43.028Z" },
+    { url = "https://files.pythonhosted.org/packages/82/4d/5f9bfbb1ea0a0d721b60caba09cd5d167735eb5c4b0b3e8ef2b5f3c00580/robotpy_wpiutil-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:37e1a4fdabf50263b1322a6efbe9c4d732c6374353fa7384fea633b737531f47", size = 357679, upload-time = "2026-03-13T02:34:45.231Z" },
 ]
 
 [[package]]
@@ -857,7 +886,7 @@ wheels = [
 
 [[package]]
 name = "wpilib"
-version = "2025.3.2.3"
+version = "2026.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyntcore" },
@@ -868,14 +897,19 @@ dependencies = [
     { name = "robotpy-wpiutil" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/8e/68d572d940da0f2127f13e6bdbd041f30e53bd93e3640b433a5660962ffc/wpilib-2025.3.2.3-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:fe7ad557a9a069973f1bd269445a3068133124ceb84f0ce618a9d1e55e4c8b82", size = 3609343, upload-time = "2025-06-02T03:53:38.348Z" },
-    { url = "https://files.pythonhosted.org/packages/f6/43/a942112162e66ad13ff816da565c2028c6933b1ed2ea417e568d84afd81d/wpilib-2025.3.2.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:ac88b7c0c1ad3b6df39d433797261a78ef1bcf0635bbb03f50efd4b33b025609", size = 3595801, upload-time = "2025-06-02T03:53:39.903Z" },
-    { url = "https://files.pythonhosted.org/packages/61/22/0a1651e3acacb5baae6592b59834c36bb9457763216e316e733016d104f1/wpilib-2025.3.2.3-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:cb3e992395731b670a43fbb1df66679d1f2dcf0e413f1221ad6f9a5acbfed040", size = 4785420, upload-time = "2025-06-02T03:53:41.379Z" },
-    { url = "https://files.pythonhosted.org/packages/7f/72/f27c46da500485bcff1b5669d106dac965f2696badfe4c3e1292d3d28709/wpilib-2025.3.2.3-cp312-cp312-manylinux_2_36_aarch64.whl", hash = "sha256:5dc3788c259f4984a00aa98ea727b93a3f7f508ea09fcdd1af32eda40935b363", size = 4315307, upload-time = "2025-06-02T03:53:42.818Z" },
-    { url = "https://files.pythonhosted.org/packages/cc/22/8c3e2a30aa6d9deda630d172031f3c043c4c896e5d6688225f2d4f7174ee/wpilib-2025.3.2.3-cp312-cp312-win_amd64.whl", hash = "sha256:0de74bdcbece3bd709352b500f1f15c9e4a44634911583ad7d8999616aa89b1d", size = 2287746, upload-time = "2025-06-02T03:53:44.271Z" },
-    { url = "https://files.pythonhosted.org/packages/bb/1b/9aac5c34f714eb7600470ea20f61e46ab42346202c7ba7a5b8d4597e6fb3/wpilib-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:a80dda585ff2e494d82852c9befe086c71354d881a526ed25f7f222dfe388c75", size = 3609059, upload-time = "2025-06-02T03:53:45.75Z" },
-    { url = "https://files.pythonhosted.org/packages/6d/0b/00c3fa874318596cc6bd9059e1ed50bb24901bbfd0af07a3b5a38f5cabc7/wpilib-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:ff60560fd1a5046ce57557ec7bd7f5b4596c631a0bc936dde34449349c65f293", size = 3595090, upload-time = "2025-06-02T03:53:47.236Z" },
-    { url = "https://files.pythonhosted.org/packages/ea/86/659d3d7998b64bf4ff53c0d129237123883abd472a61db25d4f5778959c1/wpilib-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:ea84f7cd52b7c1eb7214abd4481abb240ffb04a6f40c794f8cfd20df6519dd20", size = 4779106, upload-time = "2025-06-02T03:53:48.722Z" },
-    { url = "https://files.pythonhosted.org/packages/f3/cb/27f4ba0773b29eb4e65233f97ffd737cbb8ce75a96bb90bffda935f34b21/wpilib-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:f84e3e1eed987750c3e9136fb4ccea40cb4f7b60d309830a6dc3db42ddf64d04", size = 4310861, upload-time = "2025-06-02T03:53:50.678Z" },
-    { url = "https://files.pythonhosted.org/packages/6f/47/c1eac3e3038ca5649a80ebdd2c850fe54b6f6970c857ff73d5fc25e3bd65/wpilib-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:7619cacbc94b3978a2791c9f107daa273fd50e5bc0ca4d6dd9adc52e13aa5696", size = 2287934, upload-time = "2025-06-02T03:53:52.244Z" },
+    { url = "https://files.pythonhosted.org/packages/49/71/aefdf201141528f5908dd75e62373dca3c9a7b77b62e4be879ed79eaf1ff/wpilib-2026.2.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:0abf47ce8542eb060d167da7c0cbd4d4921a3aa4ec4f50e6d64ef433ac415957", size = 3782167, upload-time = "2026-03-13T02:35:29.344Z" },
+    { url = "https://files.pythonhosted.org/packages/71/9b/cea2ce54f88baed76dc5888f8d623be9710c00efba0117dbb27c303729ce/wpilib-2026.2.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:49b66ad51519c626ff6df16343d70679689ed32de2a2093acd1641601f219025", size = 3733941, upload-time = "2026-03-13T02:35:31.073Z" },
+    { url = "https://files.pythonhosted.org/packages/78/a1/338b1dbe8e63b14df09fc61d72dc75edf4ca00ae6bd296b57b5b06c8c1ec/wpilib-2026.2.2-cp312-cp312-manylinux_2_35_aarch64.whl", hash = "sha256:190f11a17e1a482b0129e6b8463d3b8a67428320938bf44f312abe10bd5ac62a", size = 4503328, upload-time = "2026-03-13T02:35:32.465Z" },
+    { url = "https://files.pythonhosted.org/packages/2e/ba/cc461d072608bfabb2ba7b9d517c76ba43189d892746102bc530108f9391/wpilib-2026.2.2-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:70b490f5fe1aa988b58566ee3d210e149282eb638ce92d460db1759458c978db", size = 5106264, upload-time = "2026-03-13T02:35:33.889Z" },
+    { url = "https://files.pythonhosted.org/packages/12/c7/b64ef79da3c11a05bc0c99378dc64598ee73e2593dd3875f6958ef92bb0f/wpilib-2026.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:e32a6f729ec14b7f7dc6ca5e3d04f4dbbf4e8c87bd0cc27a8df9e09d220e9ed9", size = 2265147, upload-time = "2026-03-13T02:35:35.468Z" },
+    { url = "https://files.pythonhosted.org/packages/33/ea/0f486d18942c7ece69e2ce351666eca35f945febd689d3fce1e94d0a7141/wpilib-2026.2.2-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:7d99629ac9afa85222072844f9bef4a046f04fb49ee655d00782b9a72c8436d0", size = 3782104, upload-time = "2026-03-13T02:35:37.105Z" },
+    { url = "https://files.pythonhosted.org/packages/d8/39/15edd0166a55df1897c60082e4f633dc27b0ef5835bc5e566fb34a54a7d0/wpilib-2026.2.2-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:bed8f77d57ecc193d85bc843b18d30c531eb2d730d12c8e5b9dd50c0fb7498ce", size = 3734008, upload-time = "2026-03-13T02:35:38.503Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/3b/76a06e2f6931fcf7a9e862142c0216534c84428eac49dd764ac775a91537/wpilib-2026.2.2-cp313-cp313-manylinux_2_35_aarch64.whl", hash = "sha256:234a25b77d32231207333ce4cb69b2f0ff02932710cdd9b1d3fafde7aab9bbd2", size = 4501421, upload-time = "2026-03-13T02:35:39.958Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/86/a39945883a588be52b8ba7b3572c615075b8ba6f0f7b5607f11688cbd3d6/wpilib-2026.2.2-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:b5d13d0db6c3598ffadc4d53fdef863d73e71c0d54a7d34662c7d252f90bf422", size = 5108510, upload-time = "2026-03-13T02:35:41.343Z" },
+    { url = "https://files.pythonhosted.org/packages/16/16/2ca5c51877f49353e5b6c3239021af7b06678483f24588d06ad8701f7f8e/wpilib-2026.2.2-cp313-cp313-win_amd64.whl", hash = "sha256:aabbab1a4a7508a3a34ece1bf8a2a05a0cbcccfaf534f2744eda8ae37a900a27", size = 2265155, upload-time = "2026-03-13T02:35:43.002Z" },
+    { url = "https://files.pythonhosted.org/packages/33/d9/2b43068c5a5a22e609866d1a90f70b3ebeb2beb58dda7be987ba3ea0bb1f/wpilib-2026.2.2-cp314-cp314-macosx_13_0_arm64.whl", hash = "sha256:810ff5ccca7ecbb8afb15b39f5fea49a177923eac10255d1444c27fc67e5ad68", size = 3736508, upload-time = "2026-03-13T02:35:44.596Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/9e/e85a69ab6b34851fe1d8c1ebefdad9301543a5ee707c975a7cfb70fe086c/wpilib-2026.2.2-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:625662dd059f0db9e8f21810d820eee15f021ce7525a6837c839e8267540cfb9", size = 3734117, upload-time = "2026-03-13T02:35:45.94Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/d5/7c8d26e18fe9ba7f1b4d7a1c18e660e85bd9879bdf9e911ecfe6f6dc018c/wpilib-2026.2.2-cp314-cp314-manylinux_2_35_aarch64.whl", hash = "sha256:415072925255bb3a0372b1929c3eb9ee815642d5633b0f69c358a2cafeb97999", size = 4514119, upload-time = "2026-03-13T02:35:47.422Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/db/04f303df4ac361fb52de6f458f3c6be7b8de5a4d00b1228b707d1cec643c/wpilib-2026.2.2-cp314-cp314-manylinux_2_35_x86_64.whl", hash = "sha256:f447e0eb0f56dcf6dad4384d66a003f239808f43bf9ae7fcfc27aae2ec7c6c63", size = 5117683, upload-time = "2026-03-13T02:35:48.887Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/9a/2ddf401e4ae6e906823dd0759b6bd1b083cc4b91376cef965e49ac806de7/wpilib-2026.2.2-cp314-cp314-win_amd64.whl", hash = "sha256:d712735e44cccf7c732094bed95420ca995f89b28c225993e9d4c9509fbe797e", size = 2314561, upload-time = "2026-03-13T02:35:50.343Z" },
 ]
